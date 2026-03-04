@@ -1,0 +1,161 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary-50: #f0f9ff;
+  --color-primary-100: #e0f2fe;
+  --color-primary-200: #bae6fd;
+  --color-primary-300: #7dd3fc;
+  --color-primary-400: #38bdf8;
+  --color-primary-500: #0ea5e9;
+  --color-primary-600: #0284c7;
+  --color-primary-700: #0369a1;
+  --color-primary-800: #075985;
+  --color-primary-900: #0c4a6e;
+
+  --color-surface-900: #0f172a;
+  --color-surface-800: #1e293b;
+  --color-surface-700: #334155;
+  --color-surface-600: #475569;
+  --color-surface-500: #64748b;
+  --color-surface-400: #94a3b8;
+  --color-surface-300: #cbd5e1;
+  --color-surface-200: #e2e8f0;
+  --color-surface-100: #f1f5f9;
+
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: var(--color-slate-900);
+  color: var(--color-slate-100);
+  overflow: hidden;
+  height: 100dvh;
+}
+
+/* ── Theme overrides (remap the Tailwind slate scale) ── */
+
+/* Dark (default) — unchanged */
+[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+/* AMOLED — true black backgrounds */
+[data-theme="amoled"] {
+  color-scheme: dark;
+  --color-slate-950: #000000;
+  --color-slate-900: #000000;
+  --color-slate-800: #080808;
+  --color-slate-700: #121212;
+  --color-slate-600: #1c1c1c;
+}
+
+/* Light — flip the entire slate scale */
+[data-theme="light"] {
+  color-scheme: light;
+  --color-slate-950: #0f172a;
+  --color-slate-900: #f8fafc;
+  --color-slate-800: #f1f5f9;
+  --color-slate-700: #e2e8f0;
+  --color-slate-600: #cbd5e1;
+  --color-slate-500: #94a3b8;
+  --color-slate-400: #64748b;
+  --color-slate-300: #475569;
+  --color-slate-200: #334155;
+  --color-slate-100: #1e293b;
+  --color-slate-50: #0f172a;
+}
+
+/* Light mode: invert hard-coded border/divider opacities */
+[data-theme="light"] .border-slate-700\/50 {
+  border-color: #cbd5e1;
+}
+[data-theme="light"] .divide-slate-700\/50 > * + * {
+  border-color: #cbd5e1;
+}
+
+#root {
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+/* Safe area insets for iOS */
+.safe-top {
+  padding-top: env(safe-area-inset-top);
+}
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.pb-safe {
+  padding-bottom: max(env(safe-area-inset-bottom), 1rem);
+}
+
+/* Service panel transitions */
+.service-panel {
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Accent color overrides (remap sky → chosen accent) ── */
+
+[data-accent="violet"] {
+  --color-sky-50:  #f5f3ff; --color-sky-100: #ede9fe;
+  --color-sky-200: #ddd6fe; --color-sky-300: #c4b5fd;
+  --color-sky-400: #a78bfa; --color-sky-500: #8b5cf6;
+  --color-sky-600: #7c3aed; --color-sky-700: #6d28d9;
+  --color-sky-800: #5b21b6; --color-sky-900: #4c1d95;
+}
+
+[data-accent="emerald"] {
+  --color-sky-50:  #ecfdf5; --color-sky-100: #d1fae5;
+  --color-sky-200: #a7f3d0; --color-sky-300: #6ee7b7;
+  --color-sky-400: #34d399; --color-sky-500: #10b981;
+  --color-sky-600: #059669; --color-sky-700: #047857;
+  --color-sky-800: #065f46; --color-sky-900: #064e3b;
+}
+
+[data-accent="rose"] {
+  --color-sky-50:  #fff1f2; --color-sky-100: #ffe4e6;
+  --color-sky-200: #fecdd3; --color-sky-300: #fda4af;
+  --color-sky-400: #fb7185; --color-sky-500: #f43f5e;
+  --color-sky-600: #e11d48; --color-sky-700: #be123c;
+  --color-sky-800: #9f1239; --color-sky-900: #881337;
+}
+
+[data-accent="amber"] {
+  --color-sky-50:  #fffbeb; --color-sky-100: #fef3c7;
+  --color-sky-200: #fde68a; --color-sky-300: #fcd34d;
+  --color-sky-400: #fbbf24; --color-sky-500: #f59e0b;
+  --color-sky-600: #d97706; --color-sky-700: #b45309;
+  --color-sky-800: #92400e; --color-sky-900: #78350f;
+}
+
+/* sky (default) — no override needed */

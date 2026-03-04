@@ -27,7 +27,7 @@ function TorrentsView() {
     refetch,
   } = useQuery({
     queryKey: ['transmission', 'torrents'],
-    queryFn: () => transmissionApi.getTorrents(),
+    queryFn: () => transmissionApi.getTorrents().then((r) => r.torrents),
     refetchInterval: 3000,
   })
   const { data: stats } = useQuery({
@@ -56,7 +56,7 @@ function TorrentsView() {
     )
   if (error) return <ErrorState error={error} retry={refetch} />
 
-  const st = (stats as any)?.arguments
+  const st = stats
 
   return (
     <div className="h-full flex flex-col overflow-hidden">
@@ -69,8 +69,7 @@ function TorrentsView() {
       )}
       <div className="flex-1 overflow-y-auto p-3 space-y-2">
         {(torrents as any[]).map((t: any) => {
-          const pct =
-            t.totalSize > 0 ? (t.downloadedEver / t.totalSize) * 100 : t.status === 6 ? 100 : 0
+          const pct = Math.round((t.percentDone ?? 0) * 100)
           const statusInfo = STATUS_MAP[t.status] ?? { label: 'Unknown', color: 'default' }
           return (
             <div key={t.id} className="bg-slate-800/50 rounded-xl p-3">

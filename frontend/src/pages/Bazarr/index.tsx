@@ -1,4 +1,4 @@
-import { MemoryRouter, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom'
+import { TabRouter, useTabLocation, useTabNavigate } from '@/lib/tabRouter'
 import { Subtitles } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useQuery } from '@tanstack/react-query'
@@ -15,8 +15,8 @@ const TABS = [
 ]
 
 function BazarrNav() {
-  const navigate = useNavigate()
-  const location = useLocation()
+  const navigate = useTabNavigate()
+  const location = useTabLocation()
   return (
     <div className="shrink-0 border-b border-slate-700/50">
       <div className="flex items-center gap-2.5 px-4 py-3">
@@ -145,20 +145,22 @@ function HistoryView() {
   )
 }
 
+function BazarrContent() {
+  const { pathname } = useTabLocation()
+  if (pathname === '/movies') return <MoviesView />
+  if (pathname === '/history') return <HistoryView />
+  return <SeriesView />
+}
+
 export function BazarrApp() {
   return (
-    <MemoryRouter initialEntries={['/series']}>
+    <TabRouter initialPath="/series">
       <div className="h-full flex flex-col overflow-hidden">
         <BazarrNav />
         <div className="flex-1 overflow-hidden">
-          <Routes>
-            <Route path="/" element={<Navigate to="/series" replace />} />
-            <Route path="/series" element={<SeriesView />} />
-            <Route path="/movies" element={<MoviesView />} />
-            <Route path="/history" element={<HistoryView />} />
-          </Routes>
+          <BazarrContent />
         </div>
       </div>
-    </MemoryRouter>
+    </TabRouter>
   )
 }

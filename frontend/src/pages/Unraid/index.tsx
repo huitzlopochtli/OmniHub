@@ -1,4 +1,4 @@
-import { MemoryRouter, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom'
+import { TabRouter, useTabLocation, useTabNavigate } from '@/lib/tabRouter'
 import { Server, Monitor, HardDrive, Activity, Play, Square, RefreshCw } from 'lucide-react'
 import { cn, formatBytes } from '@/lib/utils'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
@@ -16,8 +16,8 @@ const TABS = [
 ]
 
 function UnraidNav() {
-  const navigate = useNavigate()
-  const location = useLocation()
+  const navigate = useTabNavigate()
+  const location = useTabLocation()
   return (
     <div className="shrink-0 border-b border-slate-700/50">
       <div className="flex items-center gap-2.5 px-4 py-3">
@@ -393,21 +393,23 @@ function SharesView() {
   )
 }
 
+function UnraidContent() {
+  const { pathname } = useTabLocation()
+  if (pathname === '/containers') return <ContainersView />
+  if (pathname === '/vms') return <VMsView />
+  if (pathname === '/shares') return <SharesView />
+  return <DashboardView />
+}
+
 export function UnraidApp() {
   return (
-    <MemoryRouter initialEntries={['/dashboard']}>
+    <TabRouter initialPath="/dashboard">
       <div className="h-full flex flex-col overflow-hidden">
         <UnraidNav />
         <div className="flex-1 overflow-hidden">
-          <Routes>
-            <Route path="/" element={<Navigate to="/dashboard" replace />} />
-            <Route path="/dashboard" element={<DashboardView />} />
-            <Route path="/containers" element={<ContainersView />} />
-            <Route path="/vms" element={<VMsView />} />
-            <Route path="/shares" element={<SharesView />} />
-          </Routes>
+          <UnraidContent />
         </div>
       </div>
-    </MemoryRouter>
+    </TabRouter>
   )
 }

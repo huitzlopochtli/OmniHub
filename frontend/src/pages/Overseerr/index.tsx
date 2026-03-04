@@ -1,4 +1,4 @@
-import { MemoryRouter, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom'
+import { TabRouter, useTabLocation, useTabNavigate } from '@/lib/tabRouter'
 import { Film, Check, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
@@ -25,8 +25,8 @@ const STATUS_MAP: Record<number, { label: string; color: string }> = {
 }
 
 function OverseerrNav() {
-  const navigate = useNavigate()
-  const location = useLocation()
+  const navigate = useTabNavigate()
+  const location = useTabLocation()
   return (
     <div className="shrink-0 border-b border-slate-700/50">
       <div className="flex items-center gap-2.5 px-4 py-3">
@@ -193,19 +193,21 @@ function DiscoverView() {
   )
 }
 
+function OverseerrContent() {
+  const { pathname } = useTabLocation()
+  if (pathname === '/discover') return <DiscoverView />
+  return <RequestsView />
+}
+
 export function OverseerrApp() {
   return (
-    <MemoryRouter initialEntries={['/requests']}>
+    <TabRouter initialPath="/requests">
       <div className="h-full flex flex-col overflow-hidden">
         <OverseerrNav />
         <div className="flex-1 overflow-hidden">
-          <Routes>
-            <Route path="/" element={<Navigate to="/requests" replace />} />
-            <Route path="/requests" element={<RequestsView />} />
-            <Route path="/discover" element={<DiscoverView />} />
-          </Routes>
+          <OverseerrContent />
         </div>
       </div>
-    </MemoryRouter>
+    </TabRouter>
   )
 }

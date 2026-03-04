@@ -1,4 +1,4 @@
-import { MemoryRouter, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom'
+import { TabRouter, useTabLocation, useTabNavigate } from '@/lib/tabRouter'
 import { BarChart2, Users } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useQuery } from '@tanstack/react-query'
@@ -16,8 +16,8 @@ const TABS = [
 ]
 
 function TautulliNav() {
-  const navigate = useNavigate()
-  const location = useLocation()
+  const navigate = useTabNavigate()
+  const location = useTabLocation()
   return (
     <div className="shrink-0 border-b border-slate-700/50">
       <div className="flex items-center gap-2.5 px-4 py-3">
@@ -179,20 +179,22 @@ function StatsView() {
   )
 }
 
+function TautulliContent() {
+  const { pathname } = useTabLocation()
+  if (pathname === '/history') return <HistoryView />
+  if (pathname === '/stats') return <StatsView />
+  return <ActivityView />
+}
+
 export function TautulliApp() {
   return (
-    <MemoryRouter initialEntries={['/activity']}>
+    <TabRouter initialPath="/activity">
       <div className="h-full flex flex-col overflow-hidden">
         <TautulliNav />
         <div className="flex-1 overflow-hidden">
-          <Routes>
-            <Route path="/" element={<Navigate to="/activity" replace />} />
-            <Route path="/activity" element={<ActivityView />} />
-            <Route path="/history" element={<HistoryView />} />
-            <Route path="/stats" element={<StatsView />} />
-          </Routes>
+          <TautulliContent />
         </div>
       </div>
-    </MemoryRouter>
+    </TabRouter>
   )
 }

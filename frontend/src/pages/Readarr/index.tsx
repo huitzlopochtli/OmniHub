@@ -1,4 +1,4 @@
-import { MemoryRouter, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom'
+import { TabRouter, useTabLocation, useTabNavigate } from '@/lib/tabRouter'
 import { BookOpen } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { BookList } from './BookList'
@@ -14,8 +14,8 @@ const TABS = [
 ]
 
 function ReadarrNav() {
-  const navigate = useNavigate()
-  const location = useLocation()
+  const navigate = useTabNavigate()
+  const location = useTabLocation()
   return (
     <div className="shrink-0 border-b border-slate-700/50">
       <div className="flex items-center gap-2.5 px-4 py-3">
@@ -45,21 +45,23 @@ function ReadarrNav() {
   )
 }
 
+function ReadarrContent() {
+  const { pathname } = useTabLocation()
+  if (pathname === '/queue') return <ReadarrQueue />
+  if (pathname === '/wanted') return <ReadarrWanted />
+  if (pathname === '/history') return <ReadarrHistory />
+  return <BookList />
+}
+
 export function ReadarrApp() {
   return (
-    <MemoryRouter initialEntries={['/books']}>
+    <TabRouter initialPath="/books">
       <div className="h-full flex flex-col overflow-hidden">
         <ReadarrNav />
         <div className="flex-1 overflow-hidden">
-          <Routes>
-            <Route path="/" element={<Navigate to="/books" replace />} />
-            <Route path="/books" element={<BookList />} />
-            <Route path="/queue" element={<ReadarrQueue />} />
-            <Route path="/wanted" element={<ReadarrWanted />} />
-            <Route path="/history" element={<ReadarrHistory />} />
-          </Routes>
+          <ReadarrContent />
         </div>
       </div>
-    </MemoryRouter>
+    </TabRouter>
   )
 }

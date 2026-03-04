@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from 'react-router-dom'
+import { useTabParams, useTabNavigate } from '@/lib/tabRouter'
 import { useQuery, useMutation } from '@tanstack/react-query'
 import { ArrowLeft, Search } from 'lucide-react'
 import { lidarrApi } from '@/services/api/lidarr'
@@ -9,8 +9,8 @@ import { Button } from '@/components/ui/Button'
 import { useSettingsStore } from '@/stores/settingsStore'
 
 export function ArtistDetail() {
-  const { id } = useParams<{ id: string }>()
-  const navigate = useNavigate()
+  const { id } = useTabParams<{ id: string }>()
+  const navigate = useTabNavigate()
   const { getService } = useSettingsStore()
   const cfg = getService('lidarr')
 
@@ -49,7 +49,7 @@ export function ArtistDetail() {
   return (
     <div className="h-full overflow-y-auto">
       <button
-        onClick={() => navigate(-1)}
+        onClick={() => navigate('/artists')}
         className="flex items-center gap-1.5 text-slate-400 hover:text-slate-200 px-4 py-3 transition-colors"
       >
         <ArrowLeft size={16} /> Back

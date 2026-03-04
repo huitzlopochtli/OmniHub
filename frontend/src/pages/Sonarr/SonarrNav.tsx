@@ -1,4 +1,4 @@
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useTabNavigate, useTabLocation } from '@/lib/tabRouter'
 import { cn } from '@/lib/utils'
 import { Tv2 } from 'lucide-react'
 
@@ -11,8 +11,8 @@ const TABS = [
 ]
 
 export function SonarrNav() {
-  const navigate = useNavigate()
-  const location = useLocation()
+  const navigate = useTabNavigate()
+  const location = useTabLocation()
 
   return (
     <div className="shrink-0 border-b border-slate-700/50">

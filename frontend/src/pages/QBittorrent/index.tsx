@@ -1,4 +1,4 @@
-import { MemoryRouter, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom'
+import { TabRouter, useTabLocation, useTabNavigate } from '@/lib/tabRouter'
 import { Magnet, Pause, Play, X } from 'lucide-react'
 import { cn, formatBytes, formatSpeed, formatETA } from '@/lib/utils'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
@@ -24,8 +24,8 @@ const STATE_COLORS: Record<string, string> = {
 }
 
 function QBNav() {
-  const navigate = useNavigate()
-  const location = useLocation()
+  const navigate = useTabNavigate()
+  const location = useTabLocation()
   return (
     <div className="shrink-0 border-b border-slate-700/50">
       <div className="flex items-center gap-2.5 px-4 py-3">
@@ -152,18 +152,19 @@ function TorrentsView() {
   )
 }
 
+function QBContent() {
+  return <TorrentsView />
+}
+
 export function QBittorrentApp() {
   return (
-    <MemoryRouter initialEntries={['/torrents']}>
+    <TabRouter initialPath="/torrents">
       <div className="h-full flex flex-col overflow-hidden">
         <QBNav />
         <div className="flex-1 overflow-hidden">
-          <Routes>
-            <Route path="/" element={<Navigate to="/torrents" replace />} />
-            <Route path="/torrents" element={<TorrentsView />} />
-          </Routes>
+          <QBContent />
         </div>
       </div>
-    </MemoryRouter>
+    </TabRouter>
   )
 }

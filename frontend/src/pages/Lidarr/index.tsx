@@ -1,4 +1,4 @@
-import { MemoryRouter, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom'
+import { TabRouter, useTabLocation, useTabNavigate } from '@/lib/tabRouter'
 import { Music } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { ArtistList } from './ArtistList'
@@ -15,8 +15,8 @@ const TABS = [
 ]
 
 function LidarrNav() {
-  const navigate = useNavigate()
-  const location = useLocation()
+  const navigate = useTabNavigate()
+  const location = useTabLocation()
   return (
     <div className="shrink-0 border-b border-slate-700/50">
       <div className="flex items-center gap-2.5 px-4 py-3">
@@ -46,22 +46,24 @@ function LidarrNav() {
   )
 }
 
+function LidarrContent() {
+  const { pathname } = useTabLocation()
+  if (pathname.startsWith('/artists/')) return <ArtistDetail />
+  if (pathname === '/queue') return <LidarrQueue />
+  if (pathname === '/wanted') return <LidarrWanted />
+  if (pathname === '/history') return <LidarrHistory />
+  return <ArtistList />
+}
+
 export function LidarrApp() {
   return (
-    <MemoryRouter initialEntries={['/artists']}>
+    <TabRouter initialPath="/artists">
       <div className="h-full flex flex-col overflow-hidden">
         <LidarrNav />
         <div className="flex-1 overflow-hidden">
-          <Routes>
-            <Route path="/" element={<Navigate to="/artists" replace />} />
-            <Route path="/artists" element={<ArtistList />} />
-            <Route path="/artists/:id" element={<ArtistDetail />} />
-            <Route path="/queue" element={<LidarrQueue />} />
-            <Route path="/wanted" element={<LidarrWanted />} />
-            <Route path="/history" element={<LidarrHistory />} />
-          </Routes>
+          <LidarrContent />
         </div>
       </div>
-    </MemoryRouter>
+    </TabRouter>
   )
 }

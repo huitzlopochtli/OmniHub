@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from 'react-router-dom'
+import { useTabParams, useTabNavigate } from '@/lib/tabRouter'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { ArrowLeft, Search, RefreshCw, CheckCircle2, XCircle } from 'lucide-react'
 import { sonarrApi } from '@/services/api/sonarr'
@@ -10,8 +10,8 @@ import { ErrorState } from '@/components/shared/ErrorState'
 import { formatBytes } from '@/lib/utils'
 
 export function SeriesDetail() {
-  const { id } = useParams<{ id: string }>()
-  const navigate = useNavigate()
+  const { id } = useTabParams<{ id: string }>()
+  const navigate = useTabNavigate()
   const queryClient = useQueryClient()
   const seriesId = parseInt(id ?? '0')
 

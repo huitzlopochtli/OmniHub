@@ -1,4 +1,4 @@
-import { MemoryRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { TabRouter, useTabLocation } from '@/lib/tabRouter'
 import { SeriesList } from './SeriesList'
 import { SeriesDetail } from './SeriesDetail'
 import { SonarrCalendar } from './SonarrCalendar'
@@ -7,23 +7,25 @@ import { SonarrHistory } from './SonarrHistory'
 import { SonarrWanted } from './SonarrWanted'
 import { SonarrNav } from './SonarrNav'
 
+function SonarrContent() {
+  const { pathname } = useTabLocation()
+  if (pathname.startsWith('/series/')) return <SeriesDetail />
+  if (pathname === '/calendar') return <SonarrCalendar />
+  if (pathname === '/queue') return <SonarrQueue />
+  if (pathname === '/history') return <SonarrHistory />
+  if (pathname === '/wanted') return <SonarrWanted />
+  return <SeriesList />
+}
+
 export function SonarrApp() {
   return (
-    <MemoryRouter initialEntries={['/series']}>
+    <TabRouter initialPath="/series">
       <div className="h-full flex flex-col overflow-hidden">
         <SonarrNav />
         <div className="flex-1 overflow-hidden">
-          <Routes>
-            <Route path="/" element={<Navigate to="/series" replace />} />
-            <Route path="/series" element={<SeriesList />} />
-            <Route path="/series/:id" element={<SeriesDetail />} />
-            <Route path="/calendar" element={<SonarrCalendar />} />
-            <Route path="/queue" element={<SonarrQueue />} />
-            <Route path="/history" element={<SonarrHistory />} />
-            <Route path="/wanted" element={<SonarrWanted />} />
-          </Routes>
+          <SonarrContent />
         </div>
       </div>
-    </MemoryRouter>
+    </TabRouter>
   )
 }

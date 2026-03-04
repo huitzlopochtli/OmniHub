@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from 'react-router-dom'
+import { useTabParams, useTabNavigate } from '@/lib/tabRouter'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { ArrowLeft, Search, RefreshCw, Star, Clock, Calendar } from 'lucide-react'
 import { radarrApi } from '@/services/api/radarr'
@@ -10,8 +10,8 @@ import { useSettingsStore } from '@/stores/settingsStore'
 import { formatBytes } from '@/lib/utils'
 
 export function MovieDetail() {
-  const { id } = useParams<{ id: string }>()
-  const navigate = useNavigate()
+  const { id } = useTabParams<{ id: string }>()
+  const navigate = useTabNavigate()
   const qc = useQueryClient()
   const { getService } = useSettingsStore()
   const cfg = getService('radarr')
@@ -53,7 +53,7 @@ export function MovieDetail() {
     <div className="h-full overflow-y-auto">
       {/* Back */}
       <button
-        onClick={() => navigate(-1)}
+        onClick={() => navigate('/movies')}
         className="flex items-center gap-1.5 text-slate-400 hover:text-slate-200 px-4 py-3 transition-colors"
       >
         <ArrowLeft size={16} /> Back

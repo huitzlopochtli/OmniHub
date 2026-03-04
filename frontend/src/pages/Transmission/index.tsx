@@ -1,4 +1,3 @@
-import { MemoryRouter as _MemoryRouter } from 'react-router-dom'
 import { Magnet, Pause, Play, X } from 'lucide-react'
 import { formatBytes, formatSpeed } from '@/lib/utils'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'

@@ -1,4 +1,3 @@
-import { MemoryRouter } from 'react-router-dom'
 import { Magnet, Pause, Play, X } from 'lucide-react'
 import { formatBytes, formatSpeed } from '@/lib/utils'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
@@ -127,13 +126,11 @@ function TorrentsView() {
 
 export function DelugeApp() {
   return (
-    <MemoryRouter initialEntries={['/']}>
-      <div className="h-full flex flex-col overflow-hidden">
-        <DelugeNav />
-        <div className="flex-1 overflow-hidden">
-          <TorrentsView />
-        </div>
+    <div className="h-full flex flex-col overflow-hidden">
+      <DelugeNav />
+      <div className="flex-1 overflow-hidden">
+        <TorrentsView />
       </div>
-    </MemoryRouter>
+    </div>
   )
 }

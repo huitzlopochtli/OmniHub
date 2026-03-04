@@ -1,4 +1,4 @@
-import { MemoryRouter, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom'
+import { TabRouter, useTabLocation, useTabNavigate } from '@/lib/tabRouter'
 import { Download } from 'lucide-react'
 import { cn, formatSpeed } from '@/lib/utils'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
@@ -16,8 +16,8 @@ const TABS = [
 ]
 
 function SABNav() {
-  const navigate = useNavigate()
-  const location = useLocation()
+  const navigate = useTabNavigate()
+  const location = useTabLocation()
   return (
     <div className="shrink-0 border-b border-slate-700/50">
       <div className="flex items-center gap-2.5 px-4 py-3">
@@ -178,19 +178,21 @@ function HistoryView() {
   )
 }
 
+function SABContent() {
+  const { pathname } = useTabLocation()
+  if (pathname === '/history') return <HistoryView />
+  return <QueueView />
+}
+
 export function SABnzbdApp() {
   return (
-    <MemoryRouter initialEntries={['/queue']}>
+    <TabRouter initialPath="/queue">
       <div className="h-full flex flex-col overflow-hidden">
         <SABNav />
         <div className="flex-1 overflow-hidden">
-          <Routes>
-            <Route path="/" element={<Navigate to="/queue" replace />} />
-            <Route path="/queue" element={<QueueView />} />
-            <Route path="/history" element={<HistoryView />} />
-          </Routes>
+          <SABContent />
         </div>
       </div>
-    </MemoryRouter>
+    </TabRouter>
   )
 }

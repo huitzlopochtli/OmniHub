@@ -10,7 +10,10 @@ import { Button } from '@/components/ui/Button'
 import { ProgressBar } from '@/components/ui/ProgressBar'
 import { Pause, Play, X, Clock } from 'lucide-react'
 
-const TABS = [{ path: '/queue', label: 'Queue' }, { path: '/history', label: 'History' }]
+const TABS = [
+  { path: '/queue', label: 'Queue' },
+  { path: '/history', label: 'History' },
+]
 
 function SABNav() {
   const navigate = useNavigate()
@@ -23,9 +26,16 @@ function SABNav() {
       </div>
       <div className="flex overflow-x-auto scrollbar-none px-2">
         {TABS.map((tab) => (
-          <button key={tab.path} onClick={() => navigate(tab.path)}
-            className={cn('px-4 py-2 text-sm whitespace-nowrap border-b-2 transition-colors',
-              location.pathname === tab.path ? 'border-sky-500 text-sky-400' : 'border-transparent text-slate-400 hover:text-slate-200')}>
+          <button
+            key={tab.path}
+            onClick={() => navigate(tab.path)}
+            className={cn(
+              'px-4 py-2 text-sm whitespace-nowrap border-b-2 transition-colors',
+              location.pathname === tab.path
+                ? 'border-sky-500 text-sky-400'
+                : 'border-transparent text-slate-400 hover:text-slate-200',
+            )}
+          >
             {tab.label}
           </button>
         ))}
@@ -41,11 +51,25 @@ function QueueView() {
     queryFn: () => sabnzbdApi.getQueue(),
     refetchInterval: 3000,
   })
-  const pauseMut = useMutation({ mutationFn: sabnzbdApi.pauseQueue, onSuccess: () => qc.invalidateQueries({ queryKey: ['sabnzbd', 'queue'] }) })
-  const resumeMut = useMutation({ mutationFn: sabnzbdApi.resumeQueue, onSuccess: () => qc.invalidateQueries({ queryKey: ['sabnzbd', 'queue'] }) })
-  const deleteMut = useMutation({ mutationFn: (id: string) => sabnzbdApi.deleteJob(id), onSuccess: () => qc.invalidateQueries({ queryKey: ['sabnzbd', 'queue'] }) })
+  const pauseMut = useMutation({
+    mutationFn: sabnzbdApi.pauseQueue,
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['sabnzbd', 'queue'] }),
+  })
+  const resumeMut = useMutation({
+    mutationFn: sabnzbdApi.resumeQueue,
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['sabnzbd', 'queue'] }),
+  })
+  const deleteMut = useMutation({
+    mutationFn: (id: string) => sabnzbdApi.deleteJob(id),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['sabnzbd', 'queue'] }),
+  })
 
-  if (isLoading) return <div className="flex items-center justify-center h-full"><Spinner size="lg" /></div>
+  if (isLoading)
+    return (
+      <div className="flex items-center justify-center h-full">
+        <Spinner size="lg" />
+      </div>
+    )
   if (error) return <ErrorState error={error} retry={refetch} />
 
   const q = (data as any)?.queue
@@ -59,10 +83,20 @@ function QueueView() {
       {/* Status bar */}
       <div className="shrink-0 flex items-center justify-between px-4 py-2 border-b border-slate-700/50 bg-slate-800/30">
         <div className="flex items-center gap-3 text-sm">
-          <span className={cn('font-medium', paused ? 'text-yellow-400' : 'text-green-400')}>{paused ? 'Paused' : formatSpeed(parseFloat(speed) * 1024 * 1024)}</span>
-          <span className="text-slate-500 flex items-center gap-1"><Clock size={12} />{eta}</span>
+          <span className={cn('font-medium', paused ? 'text-yellow-400' : 'text-green-400')}>
+            {paused ? 'Paused' : formatSpeed(parseFloat(speed) * 1024 * 1024)}
+          </span>
+          <span className="text-slate-500 flex items-center gap-1">
+            <Clock size={12} />
+            {eta}
+          </span>
         </div>
-        <Button size="sm" variant="ghost" onClick={() => paused ? resumeMut.mutate() : pauseMut.mutate()} loading={pauseMut.isPending || resumeMut.isPending}>
+        <Button
+          size="sm"
+          variant="ghost"
+          onClick={() => (paused ? resumeMut.mutate() : pauseMut.mutate())}
+          loading={pauseMut.isPending || resumeMut.isPending}
+        >
           {paused ? <Play size={14} /> : <Pause size={14} />}
         </Button>
       </div>
@@ -74,13 +108,25 @@ function QueueView() {
               <div className="flex items-start gap-2 mb-2">
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-slate-200 truncate">{item.filename}</p>
-                  <p className="text-xs text-slate-500 mt-0.5">{item.cat} · {item.sizeleft} left</p>
+                  <p className="text-xs text-slate-500 mt-0.5">
+                    {item.cat} · {item.sizeleft} left
+                  </p>
                 </div>
-                <button onClick={() => deleteMut.mutate(item.nzo_id)} className="p-1.5 rounded hover:bg-red-500/20 text-slate-500 hover:text-red-400 transition-colors"><X size={14} /></button>
+                <button
+                  onClick={() => deleteMut.mutate(item.nzo_id)}
+                  className="p-1.5 rounded hover:bg-red-500/20 text-slate-500 hover:text-red-400 transition-colors"
+                >
+                  <X size={14} />
+                </button>
               </div>
               <ProgressBar value={pct} className="mb-2" />
               <div className="flex gap-2 text-xs text-slate-400">
-                <Badge variant={item.status === 'Downloading' ? 'info' : 'default'} className="text-[10px]">{item.status}</Badge>
+                <Badge
+                  variant={item.status === 'Downloading' ? 'info' : 'default'}
+                  className="text-[10px]"
+                >
+                  {item.status}
+                </Badge>
                 <span>{item.size}</span>
               </div>
             </div>
@@ -93,8 +139,16 @@ function QueueView() {
 }
 
 function HistoryView() {
-  const { data, isLoading, error, refetch } = useQuery({ queryKey: ['sabnzbd', 'history'], queryFn: () => sabnzbdApi.getHistory() })
-  if (isLoading) return <div className="flex items-center justify-center h-full"><Spinner size="lg" /></div>
+  const { data, isLoading, error, refetch } = useQuery({
+    queryKey: ['sabnzbd', 'history'],
+    queryFn: () => sabnzbdApi.getHistory(),
+  })
+  if (isLoading)
+    return (
+      <div className="flex items-center justify-center h-full">
+        <Spinner size="lg" />
+      </div>
+    )
   if (error) return <ErrorState error={error} retry={refetch} />
   const items = (data as any)?.history?.slots ?? []
   return (
@@ -103,7 +157,18 @@ function HistoryView() {
         <div key={item.nzo_id} className="px-4 py-3">
           <p className="text-sm font-medium text-slate-200 truncate">{item.name}</p>
           <div className="flex items-center gap-2 mt-0.5 text-xs text-slate-400">
-            <Badge variant={item.status === 'Completed' ? 'success' : item.status === 'Failed' ? 'danger' : 'default'} className="text-[10px]">{item.status}</Badge>
+            <Badge
+              variant={
+                item.status === 'Completed'
+                  ? 'success'
+                  : item.status === 'Failed'
+                    ? 'danger'
+                    : 'default'
+              }
+              className="text-[10px]"
+            >
+              {item.status}
+            </Badge>
             <span>{item.size}</span>
             <span>{item.category}</span>
           </div>

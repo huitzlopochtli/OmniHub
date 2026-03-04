@@ -18,10 +18,18 @@ export function LidarrQueue() {
     mutationFn: (id: number) => lidarrApi.deleteArtist(id),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['lidarr', 'queue'] }),
   })
-  if (isLoading) return <div className="flex items-center justify-center h-full"><Spinner size="lg" /></div>
+  if (isLoading)
+    return (
+      <div className="flex items-center justify-center h-full">
+        <Spinner size="lg" />
+      </div>
+    )
   if (error) return <ErrorState error={error} retry={refetch} />
   const records = (data as any)?.records ?? []
-  if (!records.length) return <div className="flex items-center justify-center h-full text-slate-500">Queue is empty</div>
+  if (!records.length)
+    return (
+      <div className="flex items-center justify-center h-full text-slate-500">Queue is empty</div>
+    )
   return (
     <div className="h-full overflow-y-auto p-3 space-y-2">
       {records.map((item: any) => {
@@ -33,12 +41,21 @@ export function LidarrQueue() {
                 <p className="text-sm font-medium text-slate-200 truncate">{item.title}</p>
                 <p className="text-xs text-slate-500 mt-0.5">{item.artist?.artistName}</p>
               </div>
-              <button onClick={() => removeMut.mutate(item.id)} className="p-1.5 rounded-lg hover:bg-red-500/20 text-slate-500 hover:text-red-400 transition-colors"><X size={14} /></button>
+              <button
+                onClick={() => removeMut.mutate(item.id)}
+                className="p-1.5 rounded-lg hover:bg-red-500/20 text-slate-500 hover:text-red-400 transition-colors"
+              >
+                <X size={14} />
+              </button>
             </div>
             <ProgressBar value={pct} className="mb-2" />
             <div className="flex gap-2 text-xs text-slate-400">
-              <span>{formatBytes(item.size - item.sizeleft)} / {formatBytes(item.size)}</span>
-              <Badge variant="default" className="text-[10px]">{item.status}</Badge>
+              <span>
+                {formatBytes(item.size - item.sizeleft)} / {formatBytes(item.size)}
+              </span>
+              <Badge variant="default" className="text-[10px]">
+                {item.status}
+              </Badge>
             </div>
           </div>
         )

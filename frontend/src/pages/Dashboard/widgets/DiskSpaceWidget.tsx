@@ -54,7 +54,9 @@ export function DiskSpaceWidget({ refreshInterval }: DiskSpaceWidgetProps) {
       </CardHeader>
       <CardContent>
         {isLoading ? (
-          <div className="flex justify-center py-4"><Spinner /></div>
+          <div className="flex justify-center py-4">
+            <Spinner />
+          </div>
         ) : disks.length === 0 ? (
           <p className="text-sm text-slate-500 py-2 text-center">No disk info</p>
         ) : (
@@ -66,7 +68,9 @@ export function DiskSpaceWidget({ refreshInterval }: DiskSpaceWidgetProps) {
               return (
                 <div key={disk.path} className="space-y-1">
                   <div className="flex justify-between text-xs">
-                    <span className="text-slate-300 truncate max-w-[60%]">{disk.label || disk.path}</span>
+                    <span className="text-slate-300 truncate max-w-[60%]">
+                      {disk.label || disk.path}
+                    </span>
                     <span className="text-slate-400">{formatBytes(disk.freeSpace)} free</span>
                   </div>
                   <ProgressBar value={pct} color={color} size="sm" />

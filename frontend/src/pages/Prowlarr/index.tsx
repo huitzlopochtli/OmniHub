@@ -9,7 +9,10 @@ import { Badge } from '@/components/ui/Badge'
 import { Input } from '@/components/ui/Input'
 import { useState } from 'react'
 
-const TABS = [{ path: '/indexers', label: 'Indexers' }, { path: '/search', label: 'Search' }]
+const TABS = [
+  { path: '/indexers', label: 'Indexers' },
+  { path: '/search', label: 'Search' },
+]
 
 function ProwlarrNav() {
   const navigate = useNavigate()
@@ -22,9 +25,16 @@ function ProwlarrNav() {
       </div>
       <div className="flex overflow-x-auto scrollbar-none px-2">
         {TABS.map((tab) => (
-          <button key={tab.path} onClick={() => navigate(tab.path)}
-            className={cn('px-4 py-2 text-sm whitespace-nowrap border-b-2 transition-colors',
-              location.pathname === tab.path ? 'border-violet-500 text-violet-400' : 'border-transparent text-slate-400 hover:text-slate-200')}>
+          <button
+            key={tab.path}
+            onClick={() => navigate(tab.path)}
+            className={cn(
+              'px-4 py-2 text-sm whitespace-nowrap border-b-2 transition-colors',
+              location.pathname === tab.path
+                ? 'border-violet-500 text-violet-400'
+                : 'border-transparent text-slate-400 hover:text-slate-200',
+            )}
+          >
             {tab.label}
           </button>
         ))}
@@ -34,11 +44,21 @@ function ProwlarrNav() {
 }
 
 function IndexersView() {
-  const { data: indexers = [], isLoading, error, refetch } = useQuery({
+  const {
+    data: indexers = [],
+    isLoading,
+    error,
+    refetch,
+  } = useQuery({
     queryKey: ['prowlarr', 'indexers'],
     queryFn: prowlarrApi.getIndexers,
   })
-  if (isLoading) return <div className="flex items-center justify-center h-full"><Spinner size="lg" /></div>
+  if (isLoading)
+    return (
+      <div className="flex items-center justify-center h-full">
+        <Spinner size="lg" />
+      </div>
+    )
   if (error) return <ErrorState error={error} retry={refetch} />
   return (
     <div className="h-full overflow-y-auto divide-y divide-slate-700/50">
@@ -47,7 +67,9 @@ function IndexersView() {
           <Globe size={16} className="text-slate-500 shrink-0" />
           <div className="flex-1 min-w-0">
             <p className="text-sm font-medium text-slate-200 truncate">{idx.name}</p>
-            <p className="text-xs text-slate-500">{idx.protocol} · {idx.privacy}</p>
+            <p className="text-xs text-slate-500">
+              {idx.protocol} · {idx.privacy}
+            </p>
           </div>
           <Badge variant={idx.enable ? 'success' : 'default'} className="text-[10px]">
             {idx.enable ? 'Enabled' : 'Disabled'}
@@ -71,12 +93,26 @@ function SearchView() {
       <div className="shrink-0 p-3 flex gap-2">
         <div className="flex-1 relative">
           <Search size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500" />
-          <Input placeholder="Search all indexers..." value={query} onChange={(e) => setQuery(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && setSubmitted(query)} className="pl-8 h-9 text-sm" />
+          <Input
+            placeholder="Search all indexers..."
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && setSubmitted(query)}
+            className="pl-8 h-9 text-sm"
+          />
         </div>
-        <button onClick={() => setSubmitted(query)} className="px-3 h-9 bg-violet-600 hover:bg-violet-500 text-white rounded-lg text-sm font-medium transition-colors">Search</button>
+        <button
+          onClick={() => setSubmitted(query)}
+          className="px-3 h-9 bg-violet-600 hover:bg-violet-500 text-white rounded-lg text-sm font-medium transition-colors"
+        >
+          Search
+        </button>
       </div>
-      {isLoading && <div className="flex items-center justify-center flex-1"><Spinner size="lg" /></div>}
+      {isLoading && (
+        <div className="flex items-center justify-center flex-1">
+          <Spinner size="lg" />
+        </div>
+      )}
       {!isLoading && (
         <div className="flex-1 overflow-y-auto divide-y divide-slate-700/50">
           {(data as any[]).map((result: any, i: number) => (
@@ -84,12 +120,18 @@ function SearchView() {
               <p className="text-sm font-medium text-slate-200 truncate">{result.title}</p>
               <div className="flex items-center gap-2 mt-0.5 text-xs text-slate-500">
                 <span>{result.indexer}</span>
-                {result.size && <span>· {Math.round(result.size / 1024 / 1024 / 1024 * 10) / 10} GB</span>}
-                {result.seeders != null && <span className="text-green-400">S:{result.seeders}</span>}
+                {result.size && (
+                  <span>· {Math.round((result.size / 1024 / 1024 / 1024) * 10) / 10} GB</span>
+                )}
+                {result.seeders != null && (
+                  <span className="text-green-400">S:{result.seeders}</span>
+                )}
               </div>
             </div>
           ))}
-          {submitted && !(data as any[]).length && !isLoading && <div className="text-center py-16 text-slate-500">No results</div>}
+          {submitted && !(data as any[]).length && !isLoading && (
+            <div className="text-center py-16 text-slate-500">No results</div>
+          )}
         </div>
       )}
     </div>

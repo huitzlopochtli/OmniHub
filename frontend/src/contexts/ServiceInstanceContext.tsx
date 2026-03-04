@@ -1,3 +1,5 @@
+// Context files intentionally export both the context object and related hooks.
+/* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useMemo } from 'react'
 
 /** Provides the instanceId for the current service panel. */
@@ -9,7 +11,13 @@ export function useInstanceId(): string {
 }
 
 /** Wrap a service panel with its instanceId. */
-export function ServiceInstanceProvider({ id, children }: { id: string; children: React.ReactNode }) {
+export function ServiceInstanceProvider({
+  id,
+  children,
+}: {
+  id: string
+  children: React.ReactNode
+}) {
   const value = useMemo(() => id, [id])
   return <ServiceInstanceContext.Provider value={value}>{children}</ServiceInstanceContext.Provider>
 }

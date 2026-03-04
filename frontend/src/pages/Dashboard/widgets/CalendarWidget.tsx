@@ -79,7 +79,9 @@ export function CalendarWidget({ refreshInterval }: CalendarWidgetProps) {
       </CardHeader>
       <CardContent>
         {isLoading ? (
-          <div className="flex justify-center py-4"><Spinner /></div>
+          <div className="flex justify-center py-4">
+            <Spinner />
+          </div>
         ) : items.length === 0 ? (
           <p className="text-sm text-slate-500 py-2 text-center">Nothing in the next 7 days</p>
         ) : (
@@ -96,13 +98,13 @@ export function CalendarWidget({ refreshInterval }: CalendarWidgetProps) {
                         <Film size={11} className="text-yellow-400 shrink-0" />
                       )}
                       <div className="flex-1 min-w-0">
-                        <p className="text-xs text-slate-300 truncate font-medium">
-                          {item.title}
-                        </p>
+                        <p className="text-xs text-slate-300 truncate font-medium">{item.title}</p>
                         <p className="text-[10px] text-slate-500 truncate">{item.subtitle}</p>
                       </div>
                       {item.hasFile && (
-                        <Badge variant="success" size="sm">✓</Badge>
+                        <Badge variant="success" size="sm">
+                          ✓
+                        </Badge>
                       )}
                     </div>
                   ))}

@@ -16,7 +16,12 @@ export function MovieDetail() {
   const { getService } = useSettingsStore()
   const cfg = getService('radarr')
 
-  const { data: movie, isLoading, error, refetch } = useQuery({
+  const {
+    data: movie,
+    isLoading,
+    error,
+    refetch,
+  } = useQuery({
     queryKey: ['radarr', 'movie', id],
     queryFn: () => radarrApi.getMovieById(Number(id)),
     enabled: !!id,
@@ -31,7 +36,12 @@ export function MovieDetail() {
     onSuccess: () => qc.invalidateQueries({ queryKey: ['radarr', 'movie', id] }),
   })
 
-  if (isLoading) return <div className="flex items-center justify-center h-full"><Spinner size="lg" /></div>
+  if (isLoading)
+    return (
+      <div className="flex items-center justify-center h-full">
+        <Spinner size="lg" />
+      </div>
+    )
   if (error || !movie) return <ErrorState error={error} retry={refetch} />
 
   const fanart = movie.images.find((i) => i.coverType === 'fanart')
@@ -42,7 +52,10 @@ export function MovieDetail() {
   return (
     <div className="h-full overflow-y-auto">
       {/* Back */}
-      <button onClick={() => navigate(-1)} className="flex items-center gap-1.5 text-slate-400 hover:text-slate-200 px-4 py-3 transition-colors">
+      <button
+        onClick={() => navigate(-1)}
+        className="flex items-center gap-1.5 text-slate-400 hover:text-slate-200 px-4 py-3 transition-colors"
+      >
         <ArrowLeft size={16} /> Back
       </button>
 
@@ -64,22 +77,51 @@ export function MovieDetail() {
         <div className="flex-1 min-w-0 pt-16">
           <h1 className="text-xl font-bold text-slate-100 leading-tight">{movie.title}</h1>
           <div className="flex flex-wrap gap-1.5 mt-1.5">
-            {movie.genres?.slice(0, 3).map((g) => <Badge key={g} variant="default" className="text-xs">{g}</Badge>)}
+            {movie.genres?.slice(0, 3).map((g) => (
+              <Badge key={g} variant="default" className="text-xs">
+                {g}
+              </Badge>
+            ))}
           </div>
           <div className="flex flex-wrap items-center gap-3 mt-2 text-sm text-slate-400">
-            {movie.year && <span className="flex items-center gap-1"><Calendar size={13} />{movie.year}</span>}
-            {movie.runtime && <span className="flex items-center gap-1"><Clock size={13} />{movie.runtime}m</span>}
-            {movie.ratings?.imdb?.value && <span className="flex items-center gap-1"><Star size={13} className="text-yellow-400" />{movie.ratings.imdb.value.toFixed(1)}</span>}
+            {movie.year && (
+              <span className="flex items-center gap-1">
+                <Calendar size={13} />
+                {movie.year}
+              </span>
+            )}
+            {movie.runtime && (
+              <span className="flex items-center gap-1">
+                <Clock size={13} />
+                {movie.runtime}m
+              </span>
+            )}
+            {movie.ratings?.imdb?.value && (
+              <span className="flex items-center gap-1">
+                <Star size={13} className="text-yellow-400" />
+                {movie.ratings.imdb.value.toFixed(1)}
+              </span>
+            )}
           </div>
         </div>
       </div>
 
       {/* Actions */}
       <div className="px-4 pb-4 flex gap-2 flex-wrap">
-        <Button size="sm" variant="primary" onClick={() => searchMut.mutate()} loading={searchMut.isPending}>
+        <Button
+          size="sm"
+          variant="primary"
+          onClick={() => searchMut.mutate()}
+          loading={searchMut.isPending}
+        >
           <Search size={14} /> Search
         </Button>
-        <Button size="sm" variant="ghost" onClick={() => refreshMut.mutate()} loading={refreshMut.isPending}>
+        <Button
+          size="sm"
+          variant="ghost"
+          onClick={() => refreshMut.mutate()}
+          loading={refreshMut.isPending}
+        >
           <RefreshCw size={14} /> Refresh
         </Button>
         <Badge variant={movie.hasFile ? 'success' : 'warning'} className="px-3 py-1">
@@ -93,7 +135,9 @@ export function MovieDetail() {
       {/* Overview */}
       {movie.overview && (
         <div className="px-4 pb-4">
-          <h2 className="text-sm font-semibold text-slate-400 mb-1.5 uppercase tracking-wide">Overview</h2>
+          <h2 className="text-sm font-semibold text-slate-400 mb-1.5 uppercase tracking-wide">
+            Overview
+          </h2>
           <p className="text-sm text-slate-300 leading-relaxed">{movie.overview}</p>
         </div>
       )}
@@ -101,7 +145,9 @@ export function MovieDetail() {
       {/* File Info */}
       {movie.movieFile && (
         <div className="px-4 pb-4">
-          <h2 className="text-sm font-semibold text-slate-400 mb-2 uppercase tracking-wide">File Info</h2>
+          <h2 className="text-sm font-semibold text-slate-400 mb-2 uppercase tracking-wide">
+            File Info
+          </h2>
           <div className="bg-slate-800/50 rounded-xl p-3 space-y-2 text-sm">
             <div className="flex justify-between">
               <span className="text-slate-400">Quality</span>
@@ -130,7 +176,9 @@ export function MovieDetail() {
       {/* Path */}
       {movie.path && (
         <div className="px-4 pb-6">
-          <h2 className="text-sm font-semibold text-slate-400 mb-1.5 uppercase tracking-wide">Path</h2>
+          <h2 className="text-sm font-semibold text-slate-400 mb-1.5 uppercase tracking-wide">
+            Path
+          </h2>
           <p className="text-xs text-slate-500 font-mono break-all">{movie.path}</p>
         </div>
       )}

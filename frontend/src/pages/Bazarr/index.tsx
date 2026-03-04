@@ -8,7 +8,11 @@ import { ErrorState } from '@/components/shared/ErrorState'
 import { Badge } from '@/components/ui/Badge'
 import { formatDistanceToNow, parseISO } from 'date-fns'
 
-const TABS = [{ path: '/series', label: 'Series' }, { path: '/movies', label: 'Movies' }, { path: '/history', label: 'History' }]
+const TABS = [
+  { path: '/series', label: 'Series' },
+  { path: '/movies', label: 'Movies' },
+  { path: '/history', label: 'History' },
+]
 
 function BazarrNav() {
   const navigate = useNavigate()
@@ -21,9 +25,16 @@ function BazarrNav() {
       </div>
       <div className="flex overflow-x-auto scrollbar-none px-2">
         {TABS.map((tab) => (
-          <button key={tab.path} onClick={() => navigate(tab.path)}
-            className={cn('px-4 py-2 text-sm whitespace-nowrap border-b-2 transition-colors',
-              location.pathname === tab.path ? 'border-purple-500 text-purple-400' : 'border-transparent text-slate-400 hover:text-slate-200')}>
+          <button
+            key={tab.path}
+            onClick={() => navigate(tab.path)}
+            className={cn(
+              'px-4 py-2 text-sm whitespace-nowrap border-b-2 transition-colors',
+              location.pathname === tab.path
+                ? 'border-purple-500 text-purple-400'
+                : 'border-transparent text-slate-400 hover:text-slate-200',
+            )}
+          >
             {tab.label}
           </button>
         ))}
@@ -33,8 +44,16 @@ function BazarrNav() {
 }
 
 function SeriesView() {
-  const { data, isLoading, error, refetch } = useQuery({ queryKey: ['bazarr', 'missing-episodes'], queryFn: () => bazarrApi.getMissingEpisodes() })
-  if (isLoading) return <div className="flex items-center justify-center h-full"><Spinner size="lg" /></div>
+  const { data, isLoading, error, refetch } = useQuery({
+    queryKey: ['bazarr', 'missing-episodes'],
+    queryFn: () => bazarrApi.getMissingEpisodes(),
+  })
+  if (isLoading)
+    return (
+      <div className="flex items-center justify-center h-full">
+        <Spinner size="lg" />
+      </div>
+    )
   if (error) return <ErrorState error={error} retry={refetch} />
   const items = (data as any)?.data ?? []
   return (
@@ -42,20 +61,36 @@ function SeriesView() {
       {items.map((s: any, i: number) => (
         <div key={i} className="flex items-center gap-3 px-4 py-3">
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-slate-200 truncate">{s.seriesTitle || s.video_path}</p>
-            <p className="text-xs text-slate-500">{s.episode_number} · {s.language}</p>
+            <p className="text-sm font-medium text-slate-200 truncate">
+              {s.seriesTitle || s.video_path}
+            </p>
+            <p className="text-xs text-slate-500">
+              {s.episode_number} · {s.language}
+            </p>
           </div>
-          <Badge variant="warning" className="text-[10px]">Missing</Badge>
+          <Badge variant="warning" className="text-[10px]">
+            Missing
+          </Badge>
         </div>
       ))}
-      {!items.length && <div className="text-center py-16 text-slate-500">No missing subtitles</div>}
+      {!items.length && (
+        <div className="text-center py-16 text-slate-500">No missing subtitles</div>
+      )}
     </div>
   )
 }
 
 function MoviesView() {
-  const { data, isLoading, error, refetch } = useQuery({ queryKey: ['bazarr', 'movies'], queryFn: () => bazarrApi.getMovies() })
-  if (isLoading) return <div className="flex items-center justify-center h-full"><Spinner size="lg" /></div>
+  const { data, isLoading, error, refetch } = useQuery({
+    queryKey: ['bazarr', 'movies'],
+    queryFn: () => bazarrApi.getMovies(),
+  })
+  if (isLoading)
+    return (
+      <div className="flex items-center justify-center h-full">
+        <Spinner size="lg" />
+      </div>
+    )
   if (error) return <ErrorState error={error} retry={refetch} />
   const items = (data as any)?.data ?? []
   return (
@@ -76,8 +111,16 @@ function MoviesView() {
 }
 
 function HistoryView() {
-  const { data, isLoading, error, refetch } = useQuery({ queryKey: ['bazarr', 'history'], queryFn: () => bazarrApi.getHistory() })
-  if (isLoading) return <div className="flex items-center justify-center h-full"><Spinner size="lg" /></div>
+  const { data, isLoading, error, refetch } = useQuery({
+    queryKey: ['bazarr', 'history'],
+    queryFn: () => bazarrApi.getHistory(),
+  })
+  if (isLoading)
+    return (
+      <div className="flex items-center justify-center h-full">
+        <Spinner size="lg" />
+      </div>
+    )
   if (error) return <ErrorState error={error} retry={refetch} />
   const items = (data as any)?.data ?? []
   return (
@@ -86,10 +129,16 @@ function HistoryView() {
         <div key={i} className="px-4 py-3">
           <p className="text-sm font-medium text-slate-200 truncate">{item.video_path}</p>
           <div className="flex items-center gap-2 mt-0.5">
-            <Badge variant="default" className="text-[10px]">{item.language}</Badge>
+            <Badge variant="default" className="text-[10px]">
+              {item.language}
+            </Badge>
             <span className="text-xs text-slate-500">{item.provider}</span>
           </div>
-          {item.timestamp && <p className="text-xs text-slate-600 mt-1">{formatDistanceToNow(parseISO(item.timestamp), { addSuffix: true })}</p>}
+          {item.timestamp && (
+            <p className="text-xs text-slate-600 mt-1">
+              {formatDistanceToNow(parseISO(item.timestamp), { addSuffix: true })}
+            </p>
+          )}
         </div>
       ))}
     </div>

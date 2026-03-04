@@ -8,7 +8,6 @@ import { SonarrWanted } from './SonarrWanted'
 import { SonarrNav } from './SonarrNav'
 
 export function SonarrApp() {
-
   return (
     <MemoryRouter initialEntries={['/series']}>
       <div className="h-full flex flex-col overflow-hidden">

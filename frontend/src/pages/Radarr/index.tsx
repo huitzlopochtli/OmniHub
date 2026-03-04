@@ -26,12 +26,20 @@ function RadarrNav() {
       </div>
       <div className="flex overflow-x-auto scrollbar-none px-2">
         {TABS.map((tab) => {
-          const isActive = location.pathname === tab.path || (tab.path === '/movies' && location.pathname.startsWith('/movies'))
+          const isActive =
+            location.pathname === tab.path ||
+            (tab.path === '/movies' && location.pathname.startsWith('/movies'))
           return (
-            <button key={tab.path} onClick={() => navigate(tab.path)}
-              className={cn('px-4 py-2 text-sm whitespace-nowrap border-b-2 transition-colors',
-                isActive ? 'border-yellow-500 text-yellow-400' : 'border-transparent text-slate-400 hover:text-slate-200',
-              )}>
+            <button
+              key={tab.path}
+              onClick={() => navigate(tab.path)}
+              className={cn(
+                'px-4 py-2 text-sm whitespace-nowrap border-b-2 transition-colors',
+                isActive
+                  ? 'border-yellow-500 text-yellow-400'
+                  : 'border-transparent text-slate-400 hover:text-slate-200',
+              )}
+            >
               {tab.label}
             </button>
           )

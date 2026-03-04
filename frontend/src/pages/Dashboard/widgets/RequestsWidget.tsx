@@ -33,13 +33,13 @@ export function RequestsWidget({ refreshInterval }: RequestsWidgetProps) {
           <Heart size={14} className="text-pink-400" />
           <CardTitle>Requests</CardTitle>
         </div>
-        <Badge variant={total > 0 ? 'warning' : 'default'}>
-          {total} pending
-        </Badge>
+        <Badge variant={total > 0 ? 'warning' : 'default'}>{total} pending</Badge>
       </CardHeader>
       <CardContent>
         {isLoading ? (
-          <div className="flex justify-center py-4"><Spinner /></div>
+          <div className="flex justify-center py-4">
+            <Spinner />
+          </div>
         ) : error ? (
           <p className="text-xs text-red-400">Connection failed</p>
         ) : requests.length === 0 ? (
@@ -54,9 +54,7 @@ export function RequestsWidget({ refreshInterval }: RequestsWidgetProps) {
                   <Tv2 size={11} className="text-sky-400 shrink-0" />
                 )}
                 <div className="flex-1 min-w-0">
-                  <p className="text-xs text-slate-300 truncate">
-                    {req.requestedBy.displayName}
-                  </p>
+                  <p className="text-xs text-slate-300 truncate">{req.requestedBy.displayName}</p>
                   <p className="text-[10px] text-slate-500">
                     {STATUS_LABELS[req.status] ?? 'Unknown'}
                   </p>

@@ -46,7 +46,9 @@ export function SpeedWidget({ refreshInterval }: SpeedWidgetProps) {
       </CardHeader>
       <CardContent>
         {isLoading ? (
-          <div className="flex justify-center py-4"><Spinner /></div>
+          <div className="flex justify-center py-4">
+            <Spinner />
+          </div>
         ) : error ? (
           <p className="text-xs text-red-400">Connection failed</p>
         ) : (
@@ -61,7 +63,9 @@ export function SpeedWidget({ refreshInterval }: SpeedWidgetProps) {
               <>
                 <ProgressBar value={progress} color="sky" />
                 <div className="flex justify-between text-xs text-slate-500">
-                  <span>{slotsCount} item{slotsCount > 1 ? 's' : ''}</span>
+                  <span>
+                    {slotsCount} item{slotsCount > 1 ? 's' : ''}
+                  </span>
                   <span>{formatDuration(parseTimeLeft(timeLeft))} left</span>
                 </div>
               </>

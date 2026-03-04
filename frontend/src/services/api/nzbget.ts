@@ -33,8 +33,10 @@ export function createNzbgetApi(instanceId: string) {
     pauseFromQueue: (id: number) => rpc('editqueue', ['GroupPause', 0, '', [id]]),
     resumeFromQueue: (id: number) => rpc('editqueue', ['GroupResume', 0, '', [id]]),
     moveToTop: (id: number) => rpc('editqueue', ['GroupMoveTop', 0, '', [id]]),
-    setPriority: (id: number, priority: number) => rpc('editqueue', ['GroupSetPriority', priority, '', [id]]),
-    setCategory: (id: number, category: string) => rpc('editqueue', ['GroupSetCategory', 0, category, [id]]),
+    setPriority: (id: number, priority: number) =>
+      rpc('editqueue', ['GroupSetPriority', priority, '', [id]]),
+    setCategory: (id: number, category: string) =>
+      rpc('editqueue', ['GroupSetCategory', 0, category, [id]]),
     historyDelete: (id: number) => rpc('editqueue', ['HistoryDelete', 0, '', [id]]),
     scan: () => rpc('scan'),
     getConfig: () => rpc('config'),
@@ -44,16 +46,21 @@ export function createNzbgetApi(instanceId: string) {
 
 // Backward-compatible shim: always binds to first enabled nzbget instance.
 // For multi-instance awareness inside service panels, use useNzbgetApi() instead.
-// @ts-ignore
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const nzbgetApi: ReturnType<typeof createNzbgetApi> = new Proxy({} as unknown as ReturnType<typeof createNzbgetApi>, {
-  get(_: unknown, prop: string) {
-    const id = useSettingsStore.getState()
-      .getInstancesByType('nzbget')
-      .find((i) => i.enabled && i.baseUrl)?.id ?? ''
-    return (createNzbgetApi(id) as Record<string, unknown>)[prop]
+// @ts-expect-error -- Proxy shim: {} is not assignable but is safe at runtime
+
+export const nzbgetApi: ReturnType<typeof createNzbgetApi> = new Proxy(
+  {} as unknown as ReturnType<typeof createNzbgetApi>,
+  {
+    get(_: unknown, prop: string) {
+      const id =
+        useSettingsStore
+          .getState()
+          .getInstancesByType('nzbget')
+          .find((i) => i.enabled && i.baseUrl)?.id ?? ''
+      return (createNzbgetApi(id) as Record<string, unknown>)[prop]
+    },
   },
-})
+)
 
 export function useNzbgetApi() {
   const instanceId = useInstanceId()

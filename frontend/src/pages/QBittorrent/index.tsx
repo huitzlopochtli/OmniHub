@@ -11,9 +11,16 @@ import { ProgressBar } from '@/components/ui/ProgressBar'
 const TABS = [{ path: '/torrents', label: 'Torrents' }]
 
 const STATE_COLORS: Record<string, string> = {
-  downloading: 'info', seeding: 'success', paused: 'warning',
-  pausedUP: 'warning', pausedDL: 'warning', error: 'error',
-  stalledDL: 'default', stalledUP: 'default', queuedDL: 'default', queuedUP: 'default',
+  downloading: 'info',
+  seeding: 'success',
+  paused: 'warning',
+  pausedUP: 'warning',
+  pausedDL: 'warning',
+  error: 'error',
+  stalledDL: 'default',
+  stalledUP: 'default',
+  queuedDL: 'default',
+  queuedUP: 'default',
 }
 
 function QBNav() {
@@ -27,9 +34,16 @@ function QBNav() {
       </div>
       <div className="flex overflow-x-auto scrollbar-none px-2">
         {TABS.map((tab) => (
-          <button key={tab.path} onClick={() => navigate(tab.path)}
-            className={cn('px-4 py-2 text-sm whitespace-nowrap border-b-2 transition-colors',
-              location.pathname === tab.path ? 'border-teal-500 text-teal-400' : 'border-transparent text-slate-400 hover:text-slate-200')}>
+          <button
+            key={tab.path}
+            onClick={() => navigate(tab.path)}
+            className={cn(
+              'px-4 py-2 text-sm whitespace-nowrap border-b-2 transition-colors',
+              location.pathname === tab.path
+                ? 'border-teal-500 text-teal-400'
+                : 'border-transparent text-slate-400 hover:text-slate-200',
+            )}
+          >
             {tab.label}
           </button>
         ))}
@@ -40,17 +54,40 @@ function QBNav() {
 
 function TorrentsView() {
   const qc = useQueryClient()
-  const { data: torrents = [], isLoading, error, refetch } = useQuery({
+  const {
+    data: torrents = [],
+    isLoading,
+    error,
+    refetch,
+  } = useQuery({
     queryKey: ['qbittorrent', 'torrents'],
     queryFn: () => qbittorrentApi.getTorrents(),
     refetchInterval: 3000,
   })
-  const { data: info } = useQuery({ queryKey: ['qbittorrent', 'info'], queryFn: qbittorrentApi.getTransferInfo, refetchInterval: 3000 })
-  const pauseMut = useMutation({ mutationFn: (hash: string) => qbittorrentApi.pauseTorrent(hash), onSuccess: () => qc.invalidateQueries({ queryKey: ['qbittorrent'] }) })
-  const resumeMut = useMutation({ mutationFn: (hash: string) => qbittorrentApi.resumeTorrent(hash), onSuccess: () => qc.invalidateQueries({ queryKey: ['qbittorrent'] }) })
-  const deleteMut = useMutation({ mutationFn: (hash: string) => qbittorrentApi.deleteTorrent(hash, false), onSuccess: () => qc.invalidateQueries({ queryKey: ['qbittorrent'] }) })
+  const { data: info } = useQuery({
+    queryKey: ['qbittorrent', 'info'],
+    queryFn: qbittorrentApi.getTransferInfo,
+    refetchInterval: 3000,
+  })
+  const pauseMut = useMutation({
+    mutationFn: (hash: string) => qbittorrentApi.pauseTorrent(hash),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['qbittorrent'] }),
+  })
+  const resumeMut = useMutation({
+    mutationFn: (hash: string) => qbittorrentApi.resumeTorrent(hash),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['qbittorrent'] }),
+  })
+  const deleteMut = useMutation({
+    mutationFn: (hash: string) => qbittorrentApi.deleteTorrent(hash, false),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['qbittorrent'] }),
+  })
 
-  if (isLoading) return <div className="flex items-center justify-center h-full"><Spinner size="lg" /></div>
+  if (isLoading)
+    return (
+      <div className="flex items-center justify-center h-full">
+        <Spinner size="lg" />
+      </div>
+    )
   if (error) return <ErrorState error={error} retry={refetch} />
 
   return (
@@ -74,23 +111,42 @@ function TorrentsView() {
               </div>
               <div className="flex gap-1 shrink-0">
                 {t.state === 'downloading' || t.state === 'stalledDL' ? (
-                  <button onClick={() => pauseMut.mutate(t.hash)} className="p-1.5 rounded hover:bg-slate-700 text-slate-400 hover:text-slate-200 transition-colors"><Pause size={13} /></button>
+                  <button
+                    onClick={() => pauseMut.mutate(t.hash)}
+                    className="p-1.5 rounded hover:bg-slate-700 text-slate-400 hover:text-slate-200 transition-colors"
+                  >
+                    <Pause size={13} />
+                  </button>
                 ) : (
-                  <button onClick={() => resumeMut.mutate(t.hash)} className="p-1.5 rounded hover:bg-slate-700 text-slate-400 hover:text-slate-200 transition-colors"><Play size={13} /></button>
+                  <button
+                    onClick={() => resumeMut.mutate(t.hash)}
+                    className="p-1.5 rounded hover:bg-slate-700 text-slate-400 hover:text-slate-200 transition-colors"
+                  >
+                    <Play size={13} />
+                  </button>
                 )}
-                <button onClick={() => deleteMut.mutate(t.hash)} className="p-1.5 rounded hover:bg-red-500/20 text-slate-500 hover:text-red-400 transition-colors"><X size={13} /></button>
+                <button
+                  onClick={() => deleteMut.mutate(t.hash)}
+                  className="p-1.5 rounded hover:bg-red-500/20 text-slate-500 hover:text-red-400 transition-colors"
+                >
+                  <X size={13} />
+                </button>
               </div>
             </div>
             <ProgressBar value={Math.round(t.progress * 100)} className="mb-2" />
             <div className="flex items-center gap-2 flex-wrap">
-              <Badge variant={(STATE_COLORS[t.state] || 'default') as any} className="text-[10px]">{t.state}</Badge>
+              <Badge variant={(STATE_COLORS[t.state] || 'default') as any} className="text-[10px]">
+                {t.state}
+              </Badge>
               <span className="text-xs text-green-400">↓ {formatSpeed(t.dlspeed)}</span>
               <span className="text-xs text-sky-400">↑ {formatSpeed(t.upspeed)}</span>
               {t.category && <span className="text-xs text-slate-500">{t.category}</span>}
             </div>
           </div>
         ))}
-        {!(torrents as any[]).length && <div className="text-center py-16 text-slate-500">No torrents</div>}
+        {!(torrents as any[]).length && (
+          <div className="text-center py-16 text-slate-500">No torrents</div>
+        )}
       </div>
     </div>
   )

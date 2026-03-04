@@ -16,7 +16,10 @@ export function createQbittorrentApi(instanceId: string) {
     if (!cfg) return
     const res = await axios.post(
       `${getBase()}/api/v2/auth/login`,
-      new URLSearchParams({ username: cfg.username ?? 'admin', password: cfg.password ?? 'adminadmin' }),
+      new URLSearchParams({
+        username: cfg.username ?? 'admin',
+        password: cfg.password ?? 'adminadmin',
+      }),
       { headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, withCredentials: true },
     )
     const sid = (res.headers['set-cookie'] ?? []).find((c: string) => c.startsWith('SID='))
@@ -30,11 +33,17 @@ export function createQbittorrentApi(instanceId: string) {
   const base = () => getBase()
 
   return {
-    login: async () => { cookies.delete(instanceId); await ensureAuth() },
+    login: async () => {
+      cookies.delete(instanceId)
+      await ensureAuth()
+    },
 
     getTorrents: async (filter?: string, category?: string) => {
       await ensureAuth()
-      const res = await axios.get(`${base()}/api/v2/torrents/info`, { ...withCookie(), params: { filter: filter ?? 'all', category } } as any)
+      const res = await axios.get(`${base()}/api/v2/torrents/info`, {
+        ...withCookie(),
+        params: { filter: filter ?? 'all', category },
+      } as any)
       return res.data
     },
 
@@ -52,28 +61,54 @@ export function createQbittorrentApi(instanceId: string) {
 
     pauseTorrent: async (hash: string) => {
       await ensureAuth()
-      await axios.post(`${base()}/api/v2/torrents/pause`, `hashes=${hash}`,
-        { ...withCookie(), headers: { ...((withCookie() as any).headers), 'Content-Type': 'application/x-www-form-urlencoded' } } as any)
+      await axios.post(`${base()}/api/v2/torrents/pause`, `hashes=${hash}`, {
+        ...withCookie(),
+        headers: {
+          ...(withCookie() as any).headers,
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      } as any)
     },
 
     resumeTorrent: async (hash: string) => {
       await ensureAuth()
-      await axios.post(`${base()}/api/v2/torrents/resume`, `hashes=${hash}`,
-        { ...withCookie(), headers: { ...((withCookie() as any).headers), 'Content-Type': 'application/x-www-form-urlencoded' } } as any)
+      await axios.post(`${base()}/api/v2/torrents/resume`, `hashes=${hash}`, {
+        ...withCookie(),
+        headers: {
+          ...(withCookie() as any).headers,
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      } as any)
     },
 
     deleteTorrent: async (hash: string, deleteFiles = false) => {
       await ensureAuth()
-      await axios.post(`${base()}/api/v2/torrents/delete`,
+      await axios.post(
+        `${base()}/api/v2/torrents/delete`,
         `hashes=${hash}&deleteFiles=${deleteFiles}`,
-        { ...withCookie(), headers: { ...((withCookie() as any).headers), 'Content-Type': 'application/x-www-form-urlencoded' } } as any)
+        {
+          ...withCookie(),
+          headers: {
+            ...(withCookie() as any).headers,
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+        } as any,
+      )
     },
 
     setCategory: async (hash: string, category: string) => {
       await ensureAuth()
-      await axios.post(`${base()}/api/v2/torrents/setCategory`,
+      await axios.post(
+        `${base()}/api/v2/torrents/setCategory`,
         `hashes=${hash}&category=${encodeURIComponent(category)}`,
-        { ...withCookie(), headers: { ...((withCookie() as any).headers), 'Content-Type': 'application/x-www-form-urlencoded' } } as any)
+        {
+          ...withCookie(),
+          headers: {
+            ...(withCookie() as any).headers,
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+        } as any,
+      )
     },
 
     addTorrentUrl: async (url: string, savePath?: string) => {
@@ -86,44 +121,70 @@ export function createQbittorrentApi(instanceId: string) {
 
     setSpeedLimits: async (dlLimit: number, ulLimit: number) => {
       await ensureAuth()
-      await axios.post(`${base()}/api/v2/transfer/setDownloadLimit`, `limit=${dlLimit}`,
-        { ...withCookie(), headers: { ...((withCookie() as any).headers), 'Content-Type': 'application/x-www-form-urlencoded' } } as any)
-      await axios.post(`${base()}/api/v2/transfer/setUploadLimit`, `limit=${ulLimit}`,
-        { ...withCookie(), headers: { ...((withCookie() as any).headers), 'Content-Type': 'application/x-www-form-urlencoded' } } as any)
+      await axios.post(`${base()}/api/v2/transfer/setDownloadLimit`, `limit=${dlLimit}`, {
+        ...withCookie(),
+        headers: {
+          ...(withCookie() as any).headers,
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      } as any)
+      await axios.post(`${base()}/api/v2/transfer/setUploadLimit`, `limit=${ulLimit}`, {
+        ...withCookie(),
+        headers: {
+          ...(withCookie() as any).headers,
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      } as any)
     },
 
     getTorrentProperties: async (hash: string) => {
       await ensureAuth()
-      const res = await axios.get(`${base()}/api/v2/torrents/properties`, { ...withCookie(), params: { hash } } as any)
+      const res = await axios.get(`${base()}/api/v2/torrents/properties`, {
+        ...withCookie(),
+        params: { hash },
+      } as any)
       return res.data
     },
 
     getTorrentTrackers: async (hash: string) => {
       await ensureAuth()
-      const res = await axios.get(`${base()}/api/v2/torrents/trackers`, { ...withCookie(), params: { hash } } as any)
+      const res = await axios.get(`${base()}/api/v2/torrents/trackers`, {
+        ...withCookie(),
+        params: { hash },
+      } as any)
       return res.data
     },
 
     reannounce: async (hash: string) => {
       await ensureAuth()
-      await axios.post(`${base()}/api/v2/torrents/reannounce`, `hashes=${hash}`,
-        { ...withCookie(), headers: { ...((withCookie() as any).headers), 'Content-Type': 'application/x-www-form-urlencoded' } } as any)
+      await axios.post(`${base()}/api/v2/torrents/reannounce`, `hashes=${hash}`, {
+        ...withCookie(),
+        headers: {
+          ...(withCookie() as any).headers,
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      } as any)
     },
   }
 }
 
 // Backward-compatible shim: always binds to first enabled qbittorrent instance.
 // For multi-instance awareness inside service panels, use useQbittorrentApi() instead.
-// @ts-ignore
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const qbittorrentApi: ReturnType<typeof createQbittorrentApi> = new Proxy({} as unknown as ReturnType<typeof createQbittorrentApi>, {
-  get(_: unknown, prop: string) {
-    const id = useSettingsStore.getState()
-      .getInstancesByType('qbittorrent')
-      .find((i) => i.enabled && i.baseUrl)?.id ?? ''
-    return (createQbittorrentApi(id) as Record<string, unknown>)[prop]
+// @ts-expect-error -- Proxy shim: {} is not assignable but is safe at runtime
+
+export const qbittorrentApi: ReturnType<typeof createQbittorrentApi> = new Proxy(
+  {} as unknown as ReturnType<typeof createQbittorrentApi>,
+  {
+    get(_: unknown, prop: string) {
+      const id =
+        useSettingsStore
+          .getState()
+          .getInstancesByType('qbittorrent')
+          .find((i) => i.enabled && i.baseUrl)?.id ?? ''
+      return (createQbittorrentApi(id) as Record<string, unknown>)[prop]
+    },
   },
-})
+)
 
 export function useQbittorrentApi() {
   const instanceId = useInstanceId()

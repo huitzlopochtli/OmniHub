@@ -9,7 +9,13 @@ export function useInstanceId(): string {
 }
 
 /** Wrap a service panel with its instanceId. */
-export function ServiceInstanceProvider({ id, children }: { id: string; children: React.ReactNode }) {
+export function ServiceInstanceProvider({
+  id,
+  children,
+}: {
+  id: string
+  children: React.ReactNode
+}) {
   const value = useMemo(() => id, [id])
   return <ServiceInstanceContext.Provider value={value}>{children}</ServiceInstanceContext.Provider>
 }

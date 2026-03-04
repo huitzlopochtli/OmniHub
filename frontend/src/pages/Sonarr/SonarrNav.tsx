@@ -24,7 +24,8 @@ export function SonarrNav() {
       {/* Tab bar */}
       <div className="flex overflow-x-auto scrollbar-none px-2">
         {TABS.map((tab) => {
-          const isActive = location.pathname === tab.path ||
+          const isActive =
+            location.pathname === tab.path ||
             (tab.path === '/series' && location.pathname.startsWith('/series'))
           return (
             <button

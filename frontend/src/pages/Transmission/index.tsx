@@ -20,17 +20,40 @@ const STATUS_MAP: Record<number, { label: string; color: string }> = {
 
 function TorrentsView() {
   const qc = useQueryClient()
-  const { data: torrents = [], isLoading, error, refetch } = useQuery({
+  const {
+    data: torrents = [],
+    isLoading,
+    error,
+    refetch,
+  } = useQuery({
     queryKey: ['transmission', 'torrents'],
     queryFn: () => transmissionApi.getTorrents(),
     refetchInterval: 3000,
   })
-  const { data: stats } = useQuery({ queryKey: ['transmission', 'stats'], queryFn: transmissionApi.getSessionStats, refetchInterval: 3000 })
-  const stopMut = useMutation({ mutationFn: (id: number) => transmissionApi.stopTorrents([id]), onSuccess: () => qc.invalidateQueries({ queryKey: ['transmission'] }) })
-  const startMut = useMutation({ mutationFn: (id: number) => transmissionApi.startTorrents([id]), onSuccess: () => qc.invalidateQueries({ queryKey: ['transmission'] }) })
-  const removeMut = useMutation({ mutationFn: (id: number) => transmissionApi.removeTorrents([id], false), onSuccess: () => qc.invalidateQueries({ queryKey: ['transmission'] }) })
+  const { data: stats } = useQuery({
+    queryKey: ['transmission', 'stats'],
+    queryFn: transmissionApi.getSessionStats,
+    refetchInterval: 3000,
+  })
+  const stopMut = useMutation({
+    mutationFn: (id: number) => transmissionApi.stopTorrents([id]),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['transmission'] }),
+  })
+  const startMut = useMutation({
+    mutationFn: (id: number) => transmissionApi.startTorrents([id]),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['transmission'] }),
+  })
+  const removeMut = useMutation({
+    mutationFn: (id: number) => transmissionApi.removeTorrents([id], false),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['transmission'] }),
+  })
 
-  if (isLoading) return <div className="flex items-center justify-center h-full"><Spinner size="lg" /></div>
+  if (isLoading)
+    return (
+      <div className="flex items-center justify-center h-full">
+        <Spinner size="lg" />
+      </div>
+    )
   if (error) return <ErrorState error={error} retry={refetch} />
 
   const st = (stats as any)?.arguments
@@ -46,7 +69,8 @@ function TorrentsView() {
       )}
       <div className="flex-1 overflow-y-auto p-3 space-y-2">
         {(torrents as any[]).map((t: any) => {
-          const pct = t.totalSize > 0 ? (t.downloadedEver / t.totalSize) * 100 : t.status === 6 ? 100 : 0
+          const pct =
+            t.totalSize > 0 ? (t.downloadedEver / t.totalSize) * 100 : t.status === 6 ? 100 : 0
           const statusInfo = STATUS_MAP[t.status] ?? { label: 'Unknown', color: 'default' }
           return (
             <div key={t.id} className="bg-slate-800/50 rounded-xl p-3">
@@ -57,23 +81,42 @@ function TorrentsView() {
                 </div>
                 <div className="flex gap-1 shrink-0">
                   {t.status === 4 ? (
-                    <button onClick={() => stopMut.mutate(t.id)} className="p-1.5 rounded hover:bg-slate-700 text-slate-400 transition-colors"><Pause size={13} /></button>
+                    <button
+                      onClick={() => stopMut.mutate(t.id)}
+                      className="p-1.5 rounded hover:bg-slate-700 text-slate-400 transition-colors"
+                    >
+                      <Pause size={13} />
+                    </button>
                   ) : (
-                    <button onClick={() => startMut.mutate(t.id)} className="p-1.5 rounded hover:bg-slate-700 text-slate-400 transition-colors"><Play size={13} /></button>
+                    <button
+                      onClick={() => startMut.mutate(t.id)}
+                      className="p-1.5 rounded hover:bg-slate-700 text-slate-400 transition-colors"
+                    >
+                      <Play size={13} />
+                    </button>
                   )}
-                  <button onClick={() => removeMut.mutate(t.id)} className="p-1.5 rounded hover:bg-red-500/20 text-slate-500 hover:text-red-400 transition-colors"><X size={13} /></button>
+                  <button
+                    onClick={() => removeMut.mutate(t.id)}
+                    className="p-1.5 rounded hover:bg-red-500/20 text-slate-500 hover:text-red-400 transition-colors"
+                  >
+                    <X size={13} />
+                  </button>
                 </div>
               </div>
               <ProgressBar value={Math.min(100, pct)} className="mb-2" />
               <div className="flex items-center gap-2">
-                <Badge variant={statusInfo.color as any} className="text-[10px]">{statusInfo.label}</Badge>
+                <Badge variant={statusInfo.color as any} className="text-[10px]">
+                  {statusInfo.label}
+                </Badge>
                 <span className="text-xs text-green-400">↓ {formatSpeed(t.rateDownload ?? 0)}</span>
                 <span className="text-xs text-sky-400">↑ {formatSpeed(t.rateUpload ?? 0)}</span>
               </div>
             </div>
           )
         })}
-        {!(torrents as any[]).length && <div className="text-center py-16 text-slate-500">No torrents</div>}
+        {!(torrents as any[]).length && (
+          <div className="text-center py-16 text-slate-500">No torrents</div>
+        )}
       </div>
     </div>
   )

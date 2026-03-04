@@ -18,7 +18,19 @@ export function SonarrWanted() {
     onSuccess: () => qc.invalidateQueries({ queryKey: ['sonarr'] }),
   })
 
-  const records = (data as { records?: { id: number; title: string; airDateUtc: string; seasonNumber: number; episodeNumber: number; series: { title: string } }[] })?.records ?? []
+  const records =
+    (
+      data as {
+        records?: {
+          id: number
+          title: string
+          airDateUtc: string
+          seasonNumber: number
+          episodeNumber: number
+          series: { title: string }
+        }[]
+      }
+    )?.records ?? []
 
   return (
     <div className="h-full overflow-y-auto p-4 pb-20 lg:pb-4">
@@ -39,17 +51,23 @@ export function SonarrWanted() {
         )}
       </div>
       {isLoading ? (
-        <div className="flex justify-center py-8"><Spinner size="lg" /></div>
+        <div className="flex justify-center py-8">
+          <Spinner size="lg" />
+        </div>
       ) : records.length === 0 ? (
         <EmptyState title="Nothing wanted" description="All monitored episodes have files" />
       ) : (
         <div className="space-y-1.5">
           {records.map((ep) => (
-            <div key={ep.id} className="flex items-center gap-3 p-2 rounded-lg hover:bg-slate-800/50 transition-colors group">
+            <div
+              key={ep.id}
+              className="flex items-center gap-3 p-2 rounded-lg hover:bg-slate-800/50 transition-colors group"
+            >
               <div className="flex-1 min-w-0">
                 <p className="text-sm text-slate-200 truncate">{ep.series?.title}</p>
                 <p className="text-xs text-slate-400">
-                  S{String(ep.seasonNumber).padStart(2, '0')}E{String(ep.episodeNumber).padStart(2, '0')} — {ep.title}
+                  S{String(ep.seasonNumber).padStart(2, '0')}E
+                  {String(ep.episodeNumber).padStart(2, '0')} — {ep.title}
                 </p>
                 <p className="text-[10px] text-slate-500">{formatRelativeDate(ep.airDateUtc)}</p>
               </div>

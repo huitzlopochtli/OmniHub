@@ -15,7 +15,11 @@ export function SeriesDetail() {
   const queryClient = useQueryClient()
   const seriesId = parseInt(id ?? '0')
 
-  const { data: series, isLoading, error } = useQuery({
+  const {
+    data: series,
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ['sonarr', 'series', seriesId],
     queryFn: () => sonarrApi.getSeriesById(seriesId),
     enabled: !!seriesId,
@@ -32,8 +36,20 @@ export function SeriesDetail() {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['sonarr'] }),
   })
 
-  if (isLoading) return <div className="flex items-center justify-center h-full"><Spinner size="lg" /></div>
-  if (error || !series) return <ErrorState title="Failed to load series" message={(error as Error)?.message} className="h-full" />
+  if (isLoading)
+    return (
+      <div className="flex items-center justify-center h-full">
+        <Spinner size="lg" />
+      </div>
+    )
+  if (error || !series)
+    return (
+      <ErrorState
+        title="Failed to load series"
+        message={(error as Error)?.message}
+        className="h-full"
+      />
+    )
 
   const fanartUrl = series.images.find((i) => i.coverType === 'fanart')?.remoteUrl
   const posterUrl = series.images.find((i) => i.coverType === 'poster')?.remoteUrl
@@ -81,7 +97,9 @@ export function SeriesDetail() {
             </Badge>
             <span className="text-xs text-slate-400">{series.year}</span>
             {series.network && <span className="text-xs text-slate-400">{series.network}</span>}
-            {series.runtime > 0 && <span className="text-xs text-slate-400">{series.runtime}m</span>}
+            {series.runtime > 0 && (
+              <span className="text-xs text-slate-400">{series.runtime}m</span>
+            )}
           </div>
           {series.overview && (
             <p className="text-xs text-slate-400 mt-2 line-clamp-3">{series.overview}</p>
@@ -93,7 +111,8 @@ export function SeriesDetail() {
       <div className="px-4 pb-3">
         <div className="flex items-center gap-3 mb-2">
           <span className="text-xs text-slate-400">
-            {series.statistics?.episodeFileCount ?? 0} / {series.statistics?.totalEpisodeCount ?? 0} episodes
+            {series.statistics?.episodeFileCount ?? 0} / {series.statistics?.totalEpisodeCount ?? 0}{' '}
+            episodes
           </span>
           <span className="text-xs text-slate-500">
             {formatBytes(series.statistics?.sizeOnDisk ?? 0)}
@@ -134,7 +153,8 @@ export function SeriesDetail() {
                     {season.seasonNumber === 0 ? 'Specials' : `Season ${season.seasonNumber}`}
                   </h3>
                   <span className="text-xs text-slate-500">
-                    {season.statistics?.episodeFileCount ?? 0}/{season.statistics?.totalEpisodeCount ?? 0}
+                    {season.statistics?.episodeFileCount ?? 0}/
+                    {season.statistics?.totalEpisodeCount ?? 0}
                   </span>
                   <Badge variant={season.monitored ? 'info' : 'default'} size="sm">
                     {season.monitored ? 'Monitored' : 'Unmonitored'}

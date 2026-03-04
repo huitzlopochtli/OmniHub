@@ -28,13 +28,19 @@ export function UnraidWidget({ refreshInterval }: UnraidWidgetProps) {
           <Server size={14} className="text-orange-400" />
           <CardTitle>Unraid</CardTitle>
         </div>
-        <Badge variant={arrayStatus === 'Started' ? 'success' : arrayStatus === 'Stopped' ? 'danger' : 'warning'}>
+        <Badge
+          variant={
+            arrayStatus === 'Started' ? 'success' : arrayStatus === 'Stopped' ? 'danger' : 'warning'
+          }
+        >
           {arrayStatus}
         </Badge>
       </CardHeader>
       <CardContent>
         {isLoading ? (
-          <div className="flex justify-center py-4"><Spinner /></div>
+          <div className="flex justify-center py-4">
+            <Spinner />
+          </div>
         ) : error ? (
           <p className="text-xs text-red-400">Connection failed</p>
         ) : data ? (
@@ -57,20 +63,20 @@ export function UnraidWidget({ refreshInterval }: UnraidWidgetProps) {
             {/* Array disks */}
             <div className="flex justify-between text-xs text-slate-400">
               <span>{data.array.disks?.length ?? 0} disks</span>
-              <span className="text-slate-300">
-                {data.vars?.version ?? ''}
-              </span>
+              <span className="text-slate-300">{data.vars?.version ?? ''}</span>
             </div>
 
             {/* Hottest disk */}
             {data.array.disks?.length > 0 && (
               <div className="flex justify-between text-xs">
                 <span className="text-slate-400">Hottest disk</span>
-                <span className={
-                  Math.max(...data.array.disks.map((d) => d.temp ?? 0)) > 50
-                    ? 'text-red-400'
-                    : 'text-slate-300'
-                }>
+                <span
+                  className={
+                    Math.max(...data.array.disks.map((d) => d.temp ?? 0)) > 50
+                      ? 'text-red-400'
+                      : 'text-slate-300'
+                  }
+                >
                   {Math.max(...data.array.disks.map((d) => d.temp ?? 0))}°C
                 </span>
               </div>

@@ -16,7 +16,11 @@ export function QueueWidget({ service, refreshInterval }: QueueWidgetProps) {
 
   const { data, isLoading, error } = useQuery({
     queryKey: [service, 'queue'],
-    queryFn: () => (isSonarr ? sonarrApi.getQueue() : radarrApi.getQueue()) as Promise<{ totalRecords: number; records: any[] }>,
+    queryFn: () =>
+      (isSonarr ? sonarrApi.getQueue() : radarrApi.getQueue()) as Promise<{
+        totalRecords: number
+        records: any[]
+      }>,
     refetchInterval: refreshInterval,
   })
 
@@ -47,7 +51,9 @@ export function QueueWidget({ service, refreshInterval }: QueueWidgetProps) {
       </CardHeader>
       <CardContent>
         {isLoading ? (
-          <div className="flex justify-center py-4"><Spinner /></div>
+          <div className="flex justify-center py-4">
+            <Spinner />
+          </div>
         ) : error ? (
           <p className="text-xs text-red-400">Connection failed</p>
         ) : total === 0 ? (
@@ -56,15 +62,18 @@ export function QueueWidget({ service, refreshInterval }: QueueWidgetProps) {
           <div className="space-y-2">
             {records.slice(0, 4).map((item) => {
               const hasIssue =
-                item.trackedDownloadStatus === 'warning' ||
-                item.trackedDownloadStatus === 'error'
-              const progress = item.size > 0
-                ? ((item.size - item.sizeleft) / item.size) * 100
-                : 0
+                item.trackedDownloadStatus === 'warning' || item.trackedDownloadStatus === 'error'
+              const progress = item.size > 0 ? ((item.size - item.sizeleft) / item.size) * 100 : 0
 
               const title = isSonarr
-                ? (item as typeof item & { series?: { title?: string }; episode?: { seasonNumber?: number; episodeNumber?: number } }).series?.title ?? item.title
-                : (item as typeof item & { movie?: { title?: string } }).movie?.title ?? item.title
+                ? ((
+                    item as typeof item & {
+                      series?: { title?: string }
+                      episode?: { seasonNumber?: number; episodeNumber?: number }
+                    }
+                  ).series?.title ?? item.title)
+                : ((item as typeof item & { movie?: { title?: string } }).movie?.title ??
+                  item.title)
 
               return (
                 <div key={item.id} className="space-y-1">
@@ -85,9 +94,7 @@ export function QueueWidget({ service, refreshInterval }: QueueWidgetProps) {
                 </div>
               )
             })}
-            {total > 4 && (
-              <p className="text-xs text-slate-500 text-center">+{total - 4} more</p>
-            )}
+            {total > 4 && <p className="text-xs text-slate-500 text-center">+{total - 4} more</p>}
           </div>
         )}
       </CardContent>

@@ -35,7 +35,9 @@ export function NowStreamingWidget({ refreshInterval }: NowStreamingWidgetProps)
       </CardHeader>
       <CardContent>
         {isLoading ? (
-          <div className="flex justify-center py-4"><Spinner /></div>
+          <div className="flex justify-center py-4">
+            <Spinner />
+          </div>
         ) : error ? (
           <p className="text-xs text-red-400">Connection failed</p>
         ) : sessions.length === 0 ? (

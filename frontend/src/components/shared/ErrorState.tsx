@@ -19,10 +19,13 @@ export function ErrorState({
   retry,
   className,
 }: ErrorStateProps) {
-  const msg = message ?? (error instanceof Error ? error.message : error ? String(error) : undefined)
+  const msg =
+    message ?? (error instanceof Error ? error.message : error ? String(error) : undefined)
   const handleRetry = onRetry ?? retry
   return (
-    <div className={cn('flex flex-col items-center justify-center gap-4 p-8 text-center', className)}>
+    <div
+      className={cn('flex flex-col items-center justify-center gap-4 p-8 text-center', className)}
+    >
       <div className="size-12 rounded-full bg-red-900/30 flex items-center justify-center">
         <AlertCircle className="text-red-400" size={24} />
       </div>

@@ -25,13 +25,18 @@ export function SonarrHistory() {
     <div className="h-full overflow-y-auto p-4 pb-20 lg:pb-4">
       <h2 className="text-sm font-semibold text-slate-300 uppercase tracking-wide mb-4">History</h2>
       {isLoading ? (
-        <div className="flex justify-center py-8"><Spinner size="lg" /></div>
+        <div className="flex justify-center py-8">
+          <Spinner size="lg" />
+        </div>
       ) : records.length === 0 ? (
         <EmptyState title="No history" description="No past download activity" />
       ) : (
         <div className="space-y-1.5">
           {records.map((item) => (
-            <div key={item.id} className="flex items-center gap-3 p-2 rounded-lg hover:bg-slate-800/50 transition-colors">
+            <div
+              key={item.id}
+              className="flex items-center gap-3 p-2 rounded-lg hover:bg-slate-800/50 transition-colors"
+            >
               <div className="flex-1 min-w-0">
                 <p className="text-sm text-slate-200 truncate">
                   {item.series?.title} — {item.episode?.title ?? 'Unknown'}

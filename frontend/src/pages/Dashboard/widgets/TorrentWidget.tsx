@@ -6,13 +6,16 @@ import { Spinner } from '@/components/ui/Spinner'
 import { formatSpeed, formatBytes } from '@/lib/utils'
 import { qbittorrentApi } from '@/services/api/qbittorrent'
 
-
 interface TorrentWidgetProps {
   refreshInterval: number
 }
 
 export function TorrentWidget({ refreshInterval }: TorrentWidgetProps) {
-  const { data: torrents, isLoading, error } = useQuery({
+  const {
+    data: torrents,
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ['qbittorrent', 'torrents'],
     queryFn: () => qbittorrentApi.getTorrents(),
     refetchInterval: refreshInterval,
@@ -26,7 +29,9 @@ export function TorrentWidget({ refreshInterval }: TorrentWidgetProps) {
 
   const dlSpeed = stats?.dl_info_speed ?? 0
   const upSpeed = stats?.up_info_speed ?? 0
-  const active = torrents?.filter((t: { state: string }) => t.state !== 'pausedDL' && t.state !== 'pausedUP').length ?? 0
+  const active =
+    torrents?.filter((t: { state: string }) => t.state !== 'pausedDL' && t.state !== 'pausedUP')
+      .length ?? 0
   const paused = torrents?.filter((t: { state: string }) => t.state === 'pausedDL').length ?? 0
   const total = torrents?.length ?? 0
 
@@ -43,7 +48,9 @@ export function TorrentWidget({ refreshInterval }: TorrentWidgetProps) {
       </CardHeader>
       <CardContent>
         {isLoading ? (
-          <div className="flex justify-center py-4"><Spinner /></div>
+          <div className="flex justify-center py-4">
+            <Spinner />
+          </div>
         ) : error ? (
           <p className="text-xs text-red-400">Connection failed</p>
         ) : (

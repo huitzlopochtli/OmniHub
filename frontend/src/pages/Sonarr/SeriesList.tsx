@@ -42,20 +42,22 @@ export function SeriesList() {
       return 0
     })
 
-  if (isLoading) return (
-    <div className="flex items-center justify-center h-full">
-      <Spinner size="lg" />
-    </div>
-  )
+  if (isLoading)
+    return (
+      <div className="flex items-center justify-center h-full">
+        <Spinner size="lg" />
+      </div>
+    )
 
-  if (error) return (
-    <ErrorState
-      title="Failed to load series"
-      message={(error as Error).message}
-      onRetry={refetch}
-      className="h-full"
-    />
-  )
+  if (error)
+    return (
+      <ErrorState
+        title="Failed to load series"
+        message={(error as Error).message}
+        onRetry={refetch}
+        className="h-full"
+      />
+    )
 
   return (
     <div className="h-full flex flex-col overflow-hidden">
@@ -136,14 +138,14 @@ function SeriesPosterCard({ series, onClick }: { series: SonarrSeries; onClick: 
         )}
         {/* Status badge */}
         <div className="absolute top-1.5 left-1.5">
-          <Badge variant={STATUS_COLORS[series.status] ?? 'default'}>
-            {series.status}
-          </Badge>
+          <Badge variant={STATUS_COLORS[series.status] ?? 'default'}>{series.status}</Badge>
         </div>
         {/* Not monitored overlay */}
         {!series.monitored && (
           <div className="absolute inset-0 bg-slate-900/60 flex items-center justify-center">
-            <span className="text-xs text-slate-300 bg-slate-800/80 px-2 py-0.5 rounded">Unmonitored</span>
+            <span className="text-xs text-slate-300 bg-slate-800/80 px-2 py-0.5 rounded">
+              Unmonitored
+            </span>
           </div>
         )}
       </div>
@@ -174,7 +176,12 @@ function SeriesListRow({ series, onClick }: { series: SonarrSeries; onClick: () 
     >
       <div className="size-10 rounded bg-slate-700 overflow-hidden shrink-0">
         {posterUrl && (
-          <img src={posterUrl} alt={series.title} className="w-full h-full object-cover" loading="lazy" />
+          <img
+            src={posterUrl}
+            alt={series.title}
+            className="w-full h-full object-cover"
+            loading="lazy"
+          />
         )}
       </div>
       <div className="flex-1 min-w-0">
@@ -182,7 +189,8 @@ function SeriesListRow({ series, onClick }: { series: SonarrSeries; onClick: () 
         <div className="flex items-center gap-2 mt-0.5">
           <ProgressBar value={pct} color="sky" size="xs" className="w-16" />
           <span className="text-[10px] text-slate-500">
-            {series.statistics?.episodeFileCount ?? 0}/{series.statistics?.totalEpisodeCount ?? 0} eps
+            {series.statistics?.episodeFileCount ?? 0}/{series.statistics?.totalEpisodeCount ?? 0}{' '}
+            eps
           </span>
         </div>
       </div>

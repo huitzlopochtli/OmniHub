@@ -45,7 +45,9 @@ export function SonarrCalendar() {
       </div>
 
       {isLoading ? (
-        <div className="flex-1 flex items-center justify-center"><Spinner size="lg" /></div>
+        <div className="flex-1 flex items-center justify-center">
+          <Spinner size="lg" />
+        </div>
       ) : (
         <div className="flex-1 overflow-y-auto p-4 space-y-4 pb-20 lg:pb-4">
           {Object.entries(days).map(([dateKey, episodes]) => {
@@ -54,29 +56,46 @@ export function SonarrCalendar() {
             return (
               <div key={dateKey}>
                 <div className="flex items-center gap-2 mb-2">
-                  <span className={`text-sm font-semibold ${isToday ? 'text-sky-400' : 'text-slate-300'}`}>
+                  <span
+                    className={`text-sm font-semibold ${isToday ? 'text-sky-400' : 'text-slate-300'}`}
+                  >
                     {fmt(date, 'EEE MMM d')}
                   </span>
                   {isToday && <Badge variant="info">Today</Badge>}
                 </div>
-                {(!episodes || episodes.length === 0) ? (
+                {!episodes || episodes.length === 0 ? (
                   <p className="text-xs text-slate-600 pl-2">Nothing airing</p>
                 ) : (
                   <div className="space-y-2">
                     {episodes.map((ep) => {
-                      const poster = ep.series?.images?.find((i) => i.coverType === 'poster')?.remoteUrl
+                      const poster = ep.series?.images?.find(
+                        (i) => i.coverType === 'poster',
+                      )?.remoteUrl
                       return (
-                        <div key={ep.id} className="flex items-center gap-3 p-2 bg-slate-800 rounded-lg">
+                        <div
+                          key={ep.id}
+                          className="flex items-center gap-3 p-2 bg-slate-800 rounded-lg"
+                        >
                           {poster && (
-                            <img src={poster} alt="" className="size-10 rounded object-cover shrink-0" loading="lazy" />
+                            <img
+                              src={poster}
+                              alt=""
+                              className="size-10 rounded object-cover shrink-0"
+                              loading="lazy"
+                            />
                           )}
                           <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium text-slate-200 truncate">{ep.series?.title}</p>
+                            <p className="text-sm font-medium text-slate-200 truncate">
+                              {ep.series?.title}
+                            </p>
                             <p className="text-xs text-slate-400 truncate">
-                              S{String(ep.seasonNumber).padStart(2, '0')}E{String(ep.episodeNumber).padStart(2, '0')} — {ep.title}
+                              S{String(ep.seasonNumber).padStart(2, '0')}E
+                              {String(ep.episodeNumber).padStart(2, '0')} — {ep.title}
                             </p>
                             {ep.series?.airTime && (
-                              <p className="text-[10px] text-slate-500">{ep.series.airTime} · {ep.series.network}</p>
+                              <p className="text-[10px] text-slate-500">
+                                {ep.series.airTime} · {ep.series.network}
+                              </p>
                             )}
                           </div>
                           {ep.hasFile && <Badge variant="success">Downloaded</Badge>}

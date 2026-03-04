@@ -25,8 +25,14 @@ export function DashboardPage() {
   const unraidEnabled = useServiceEnabled('unraid')
 
   const anyConfigured =
-    sabnzbdEnabled || nzbgetEnabled || qbitEnabled || sonarrEnabled ||
-    radarrEnabled || tautulliEnabled || overseerrEnabled || unraidEnabled
+    sabnzbdEnabled ||
+    nzbgetEnabled ||
+    qbitEnabled ||
+    sonarrEnabled ||
+    radarrEnabled ||
+    tautulliEnabled ||
+    overseerrEnabled ||
+    unraidEnabled
 
   return (
     <div className="h-full flex flex-col overflow-hidden">
@@ -35,7 +41,11 @@ export function DashboardPage() {
         <div>
           <h1 className="text-lg font-bold text-slate-100">Dashboard</h1>
           <p className="text-xs text-slate-500">
-            {new Date().toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' })}
+            {new Date().toLocaleDateString(undefined, {
+              weekday: 'long',
+              month: 'long',
+              day: 'numeric',
+            })}
           </p>
         </div>
       </div>

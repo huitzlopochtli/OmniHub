@@ -11,10 +11,18 @@ export function ReadarrWanted() {
     queryFn: () => readarrApi.getWanted(),
   })
   const searchMut = useMutation({ mutationFn: (id: number) => readarrApi.getBooks(id) })
-  if (isLoading) return <div className="flex items-center justify-center h-full"><Spinner size="lg" /></div>
+  if (isLoading)
+    return (
+      <div className="flex items-center justify-center h-full">
+        <Spinner size="lg" />
+      </div>
+    )
   if (error) return <ErrorState error={error} retry={refetch} />
   const records = (data as any)?.records ?? []
-  if (!records.length) return <div className="flex items-center justify-center h-full text-slate-500">No missing books</div>
+  if (!records.length)
+    return (
+      <div className="flex items-center justify-center h-full text-slate-500">No missing books</div>
+    )
   return (
     <div className="h-full overflow-y-auto divide-y divide-slate-700/50">
       {records.map((book: any) => (
@@ -23,7 +31,12 @@ export function ReadarrWanted() {
             <p className="text-sm font-medium text-slate-200 truncate">{book.title}</p>
             <p className="text-xs text-slate-500">{book.author?.authorName}</p>
           </div>
-          <Button size="sm" variant="ghost" onClick={() => searchMut.mutate(book.id)} loading={searchMut.isPending}>
+          <Button
+            size="sm"
+            variant="ghost"
+            onClick={() => searchMut.mutate(book.id)}
+            loading={searchMut.isPending}
+          >
             <Search size={12} />
           </Button>
         </div>

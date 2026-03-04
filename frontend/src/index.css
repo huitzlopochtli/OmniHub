@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @theme {
   --color-primary-50: #f0f9ff;
@@ -22,7 +22,7 @@
   --color-surface-200: #e2e8f0;
   --color-surface-100: #f1f5f9;
 
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
 }
 
 * {
@@ -45,12 +45,12 @@ body {
 /* ── Theme overrides (remap the Tailwind slate scale) ── */
 
 /* Dark (default) — unchanged */
-[data-theme="dark"] {
+[data-theme='dark'] {
   color-scheme: dark;
 }
 
 /* AMOLED — true black backgrounds */
-[data-theme="amoled"] {
+[data-theme='amoled'] {
   color-scheme: dark;
   --color-slate-950: #000000;
   --color-slate-900: #000000;
@@ -60,7 +60,7 @@ body {
 }
 
 /* Light — flip the entire slate scale */
-[data-theme="light"] {
+[data-theme='light'] {
   color-scheme: light;
   --color-slate-950: #0f172a;
   --color-slate-900: #f8fafc;
@@ -76,10 +76,10 @@ body {
 }
 
 /* Light mode: invert hard-coded border/divider opacities */
-[data-theme="light"] .border-slate-700\/50 {
+[data-theme='light'] .border-slate-700\/50 {
   border-color: #cbd5e1;
 }
-[data-theme="light"] .divide-slate-700\/50 > * + * {
+[data-theme='light'] .divide-slate-700\/50 > * + * {
   border-color: #cbd5e1;
 }
 
@@ -126,7 +126,7 @@ body {
 
 /* ── Accent color overrides (remap sky → chosen accent) ── */
 
-[data-accent="violet"] {
+[data-accent='violet'] {
   --color-sky-50: #f5f3ff;
   --color-sky-100: #ede9fe;
   --color-sky-200: #ddd6fe;
@@ -139,7 +139,7 @@ body {
   --color-sky-900: #4c1d95;
 }
 
-[data-accent="emerald"] {
+[data-accent='emerald'] {
   --color-sky-50: #ecfdf5;
   --color-sky-100: #d1fae5;
   --color-sky-200: #a7f3d0;
@@ -152,7 +152,7 @@ body {
   --color-sky-900: #064e3b;
 }
 
-[data-accent="rose"] {
+[data-accent='rose'] {
   --color-sky-50: #fff1f2;
   --color-sky-100: #ffe4e6;
   --color-sky-200: #fecdd3;
@@ -165,7 +165,7 @@ body {
   --color-sky-900: #881337;
 }
 
-[data-accent="amber"] {
+[data-accent='amber'] {
   --color-sky-50: #fffbeb;
   --color-sky-100: #fef3c7;
   --color-sky-200: #fde68a;

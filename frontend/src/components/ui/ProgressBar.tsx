@@ -36,9 +36,20 @@ export function ProgressBar({
   }
 
   return (
-    <div className={cn('w-full rounded-full bg-slate-700 overflow-hidden', sizes[size], trackClassName)}>
+    <div
+      className={cn(
+        'w-full rounded-full bg-slate-700 overflow-hidden',
+        sizes[size],
+        trackClassName,
+      )}
+    >
       <div
-        className={cn('h-full rounded-full transition-all duration-500', colors[color], animated && 'animate-pulse', className)}
+        className={cn(
+          'h-full rounded-full transition-all duration-500',
+          colors[color],
+          animated && 'animate-pulse',
+          className,
+        )}
         style={{ width: `${pct}%` }}
       />
     </div>

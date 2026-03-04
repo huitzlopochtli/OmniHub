@@ -26,9 +26,16 @@ function ReadarrNav() {
         {TABS.map((tab) => {
           const isActive = location.pathname.startsWith(tab.path)
           return (
-            <button key={tab.path} onClick={() => navigate(tab.path)}
-              className={cn('px-4 py-2 text-sm whitespace-nowrap border-b-2 transition-colors',
-                isActive ? 'border-orange-500 text-orange-400' : 'border-transparent text-slate-400 hover:text-slate-200')}>
+            <button
+              key={tab.path}
+              onClick={() => navigate(tab.path)}
+              className={cn(
+                'px-4 py-2 text-sm whitespace-nowrap border-b-2 transition-colors',
+                isActive
+                  ? 'border-orange-500 text-orange-400'
+                  : 'border-transparent text-slate-400 hover:text-slate-200',
+              )}
+            >
               {tab.label}
             </button>
           )

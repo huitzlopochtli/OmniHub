@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { useSettingsStore, type ServiceKey } from '@/stores/settingsStore'
+import { useSettingsStore, type ServiceKey, type ServiceInstance } from '@/stores/settingsStore'
 
 /**
  * Select the raw instances array from state directly (stable reference).
@@ -9,7 +9,7 @@ import { useSettingsStore, type ServiceKey } from '@/stores/settingsStore'
 function useRawInstances() {
   return useSettingsStore((s) => {
     const p = s.profiles.find((p) => p.id === s.activeProfileId) ?? s.profiles[0]
-    return p?.instances ?? ([] as import('@/stores/settingsStore').ServiceInstance[])
+    return p?.instances ?? ([] as ServiceInstance[])
   })
 }
 

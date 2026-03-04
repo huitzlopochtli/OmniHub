@@ -1,0 +1,13 @@
+{
+    "recommendations": [
+        // Formatter
+        "esbenp.prettier-vscode",
+        // Linter
+        "dbaeumer.vscode-eslint",
+        // TypeScript / React helpers
+        "ms-vscode.vscode-typescript-next",
+        "bradlc.vscode-tailwindcss",
+        // Editor quality-of-life
+        "editorconfig.editorconfig"
+    ]
+}

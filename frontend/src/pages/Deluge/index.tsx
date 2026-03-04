@@ -9,7 +9,11 @@ import { Badge } from '@/components/ui/Badge'
 import { ProgressBar } from '@/components/ui/ProgressBar'
 
 const STATE_COLORS: Record<string, string> = {
-  Downloading: 'info', Seeding: 'success', Paused: 'warning', Error: 'error', Queued: 'default',
+  Downloading: 'info',
+  Seeding: 'success',
+  Paused: 'warning',
+  Error: 'error',
+  Queued: 'default',
 }
 
 function DelugeNav() {
@@ -25,7 +29,12 @@ function DelugeNav() {
 
 function TorrentsView() {
   const qc = useQueryClient()
-  const { data: status, isLoading, error, refetch } = useQuery({
+  const {
+    data: status,
+    isLoading,
+    error,
+    refetch,
+  } = useQuery({
     queryKey: ['deluge', 'status'],
     queryFn: () => delugeApi.getSessionStatus(),
     refetchInterval: 3000,
@@ -35,11 +44,25 @@ function TorrentsView() {
     queryFn: delugeApi.getTorrents,
     refetchInterval: 3000,
   })
-  const pauseMut = useMutation({ mutationFn: (hash: string) => delugeApi.pauseTorrent([hash]), onSuccess: () => qc.invalidateQueries({ queryKey: ['deluge'] }) })
-  const resumeMut = useMutation({ mutationFn: (hash: string) => delugeApi.resumeTorrent([hash]), onSuccess: () => qc.invalidateQueries({ queryKey: ['deluge'] }) })
-  const deleteMut = useMutation({ mutationFn: (hash: string) => delugeApi.removeTorrent(hash, false), onSuccess: () => qc.invalidateQueries({ queryKey: ['deluge'] }) })
+  const pauseMut = useMutation({
+    mutationFn: (hash: string) => delugeApi.pauseTorrent([hash]),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['deluge'] }),
+  })
+  const resumeMut = useMutation({
+    mutationFn: (hash: string) => delugeApi.resumeTorrent([hash]),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['deluge'] }),
+  })
+  const deleteMut = useMutation({
+    mutationFn: (hash: string) => delugeApi.removeTorrent(hash, false),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['deluge'] }),
+  })
 
-  if (isLoading) return <div className="flex items-center justify-center h-full"><Spinner size="lg" /></div>
+  if (isLoading)
+    return (
+      <div className="flex items-center justify-center h-full">
+        <Spinner size="lg" />
+      </div>
+    )
   if (error) return <ErrorState error={error} retry={refetch} />
 
   const torrents = torrentsData ? Object.entries((torrentsData as any).result ?? {}) : []
@@ -63,17 +86,36 @@ function TorrentsView() {
               </div>
               <div className="flex gap-1 shrink-0">
                 {t.state === 'Downloading' ? (
-                  <button onClick={() => pauseMut.mutate(hash)} className="p-1.5 rounded hover:bg-slate-700 text-slate-400 transition-colors"><Pause size={13} /></button>
+                  <button
+                    onClick={() => pauseMut.mutate(hash)}
+                    className="p-1.5 rounded hover:bg-slate-700 text-slate-400 transition-colors"
+                  >
+                    <Pause size={13} />
+                  </button>
                 ) : (
-                  <button onClick={() => resumeMut.mutate(hash)} className="p-1.5 rounded hover:bg-slate-700 text-slate-400 transition-colors"><Play size={13} /></button>
+                  <button
+                    onClick={() => resumeMut.mutate(hash)}
+                    className="p-1.5 rounded hover:bg-slate-700 text-slate-400 transition-colors"
+                  >
+                    <Play size={13} />
+                  </button>
                 )}
-                <button onClick={() => deleteMut.mutate(hash)} className="p-1.5 rounded hover:bg-red-500/20 text-slate-500 hover:text-red-400 transition-colors"><X size={13} /></button>
+                <button
+                  onClick={() => deleteMut.mutate(hash)}
+                  className="p-1.5 rounded hover:bg-red-500/20 text-slate-500 hover:text-red-400 transition-colors"
+                >
+                  <X size={13} />
+                </button>
               </div>
             </div>
             <ProgressBar value={Math.round((t.progress ?? 0) * 100) / 100} className="mb-2" />
             <div className="flex items-center gap-2">
-              <Badge variant={(STATE_COLORS[t.state] || 'default') as any} className="text-[10px]">{t.state}</Badge>
-              <span className="text-xs text-green-400">↓ {formatSpeed(t.download_payload_rate ?? 0)}</span>
+              <Badge variant={(STATE_COLORS[t.state] || 'default') as any} className="text-[10px]">
+                {t.state}
+              </Badge>
+              <span className="text-xs text-green-400">
+                ↓ {formatSpeed(t.download_payload_rate ?? 0)}
+              </span>
             </div>
           </div>
         ))}

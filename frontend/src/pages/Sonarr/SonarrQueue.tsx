@@ -30,13 +30,16 @@ export function SonarrQueue() {
       </div>
 
       {isLoading ? (
-        <div className="flex justify-center py-8"><Spinner size="lg" /></div>
+        <div className="flex justify-center py-8">
+          <Spinner size="lg" />
+        </div>
       ) : records.length === 0 ? (
         <EmptyState title="Queue is empty" description="Nothing currently downloading in Sonarr" />
       ) : (
         <div className="space-y-2">
           {records.map((item) => {
-            const hasIssue = item.trackedDownloadStatus === 'warning' || item.trackedDownloadStatus === 'error'
+            const hasIssue =
+              item.trackedDownloadStatus === 'warning' || item.trackedDownloadStatus === 'error'
             const progress = item.size > 0 ? ((item.size - item.sizeleft) / item.size) * 100 : 0
             return (
               <div key={item.id} className="bg-slate-800 rounded-lg p-3 border border-slate-700/50">
@@ -46,7 +49,9 @@ export function SonarrQueue() {
                       {item.series?.title}
                     </p>
                     <p className="text-xs text-slate-400 truncate">
-                      S{String(item.episode?.seasonNumber ?? 0).padStart(2, '0')}E{String(item.episode?.episodeNumber ?? 0).padStart(2, '0')} — {item.episode?.title ?? item.title}
+                      S{String(item.episode?.seasonNumber ?? 0).padStart(2, '0')}E
+                      {String(item.episode?.episodeNumber ?? 0).padStart(2, '0')} —{' '}
+                      {item.episode?.title ?? item.title}
                     </p>
                   </div>
                   <Button

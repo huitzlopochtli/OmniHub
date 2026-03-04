@@ -23,7 +23,7 @@ import { ServiceInstanceProvider } from '@/contexts/ServiceInstanceContext'
 import type { ServiceKey } from '@/stores/settingsStore'
 
 /** Map each ServiceKey to its page component */
-export const SERVICE_TYPE_PANELS: Record<ServiceKey, React.ComponentType> = {
+const SERVICE_TYPE_PANELS: Record<ServiceKey, React.ComponentType> = {
   sonarr: SonarrApp,
   radarr: RadarrApp,
   lidarr: LidarrApp,
@@ -52,9 +52,7 @@ export default function App() {
   const navigate = useNavigate()
   const { theme, accentColor } = useUIStore()
   const instances = useSettingsStore((s) => s.getActiveProfile().instances)
-  const [mountedPanels, setMountedPanels] = useState<Set<string>>(
-    new Set(['dashboard']),
-  )
+  const [mountedPanels, setMountedPanels] = useState<Set<string>>(new Set(['dashboard']))
 
   const enabledInstances = instances.filter((i) => i.enabled && i.baseUrl)
   const activePanel = location.pathname.split('/')[1] || 'dashboard'
@@ -74,6 +72,7 @@ export default function App() {
 
   // Mount panel on first visit — never unmount (preserves state)
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMountedPanels((prev) => {
       if (prev.has(activePanel)) return prev
       return new Set([...prev, activePanel])

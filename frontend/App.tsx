@@ -52,9 +52,7 @@ export default function App() {
   const navigate = useNavigate()
   const { theme, accentColor } = useUIStore()
   const instances = useSettingsStore((s) => s.getActiveProfile().instances)
-  const [mountedPanels, setMountedPanels] = useState<Set<string>>(
-    new Set(['dashboard']),
-  )
+  const [mountedPanels, setMountedPanels] = useState<Set<string>>(new Set(['dashboard']))
 
   const enabledInstances = instances.filter((i) => i.enabled && i.baseUrl)
   const activePanel = location.pathname.split('/')[1] || 'dashboard'

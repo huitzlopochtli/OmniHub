@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { useNavigate } from 'react-router-dom'
+import { useTabNavigate } from '@/lib/tabRouter'
 import { Search, LayoutGrid, List, Plus } from 'lucide-react'
 import { sonarrApi, type SonarrSeries } from '@/services/api/sonarr'
 import { Input } from '@/components/ui/Input'
@@ -21,7 +21,7 @@ const STATUS_COLORS: Record<string, 'success' | 'warning' | 'info' | 'default'> 
 }
 
 export function SeriesList() {
-  const navigate = useNavigate()
+  const navigate = useTabNavigate()
   const [search, setSearch] = useState('')
   const [viewMode, setViewMode] = useState<ViewMode>('grid')
   const [sortKey, _setSortKey] = useState<SortKey>('sortTitle')

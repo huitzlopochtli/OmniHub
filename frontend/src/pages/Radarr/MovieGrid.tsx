@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { useNavigate } from 'react-router-dom'
+import { useTabNavigate } from '@/lib/tabRouter'
 import { Search, Grid3X3, List } from 'lucide-react'
 import { radarrApi, type RadarrMovie } from '@/services/api/radarr'
 import { Input } from '@/components/ui/Input'
@@ -16,7 +16,7 @@ export function MovieGrid() {
   const [search, setSearch] = useState('')
   const [sortKey, setSortKey] = useState<SortKey>('sortTitle')
   const [viewMode, setViewMode] = useState<ViewMode>('poster')
-  const navigate = useNavigate()
+  const navigate = useTabNavigate()
   const { getService } = useSettingsStore()
   const cfg = getService('radarr')
 

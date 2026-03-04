@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { useNavigate } from 'react-router-dom'
+import { useTabNavigate } from '@/lib/tabRouter'
 import { Search } from 'lucide-react'
 import { lidarrApi } from '@/services/api/lidarr'
 import { Input } from '@/components/ui/Input'
@@ -11,7 +11,7 @@ import { useSettingsStore } from '@/stores/settingsStore'
 
 export function ArtistList() {
   const [search, setSearch] = useState('')
-  const navigate = useNavigate()
+  const navigate = useTabNavigate()
   const { getService } = useSettingsStore()
   const cfg = getService('lidarr')
 

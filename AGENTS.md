@@ -157,7 +157,7 @@ OmniHub/
 
 | Job | Trigger | Action |
 |---|---|---|
-| `build` | push to `main` or `v*` tag | `npm ci` → build with `VITE_BASE=/OmniHub/` → upload artifacts |
+| `build` | push to `master` or `v*` tag | `npm ci` → build with `VITE_BASE=/OmniHub/` → upload artifacts |
 | `deploy-pages` | same | Deploy to GitHub Pages |
 | `release` | `v*.*.*` tag only | Zip dist → create GitHub Release as `omnihub-v*.*.*.zip` |
 

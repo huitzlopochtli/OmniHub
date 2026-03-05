@@ -130,7 +130,7 @@ OmniHub/
 
 Defined in [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml).
 
-### On every push to `main`
+### On every push to `master`
 
 1. Install dependencies (`npm ci`)
 2. Build with `VITE_BASE=/OmniHub/`
@@ -162,6 +162,6 @@ Settings → Pages → Source → **GitHub Actions**
 2. `cd frontend && npm install`
 3. Create a feature branch: `git checkout -b feature/my-thing`
 4. Make changes — `npm run build` must pass with zero errors before opening a PR
-5. Open a Pull Request against `main`
+5. Open a Pull Request against `master`
 
 Code style is enforced by ESLint + Prettier. Run `npm run lint:fix && npm run format` before committing.

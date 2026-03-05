@@ -7,6 +7,17 @@ import { queryClient } from '@/services/queryClient'
 import App from './App'
 import './index.css'
 
+// --app-height fix: 100dvh is unreliable on iOS PWA/standalone mode because the
+// browser may report it incorrectly at startup (before layout is finalised) and
+// after orientation changes. Setting a CSS custom property from window.innerHeight
+// gives the actual available height at all times. Used by body, #root, and AppShell.
+function updateAppHeight() {
+  document.documentElement.style.setProperty('--app-height', `${window.innerHeight}px`)
+}
+updateAppHeight()
+window.addEventListener('resize', updateAppHeight)
+window.addEventListener('orientationchange', updateAppHeight)
+
 // iOS Safari does not proactively re-check for a new service worker when the
 // app is brought back to the foreground (especially as a home screen PWA).
 // Calling registration.update() on visibilitychange forces it to fetch sw.js

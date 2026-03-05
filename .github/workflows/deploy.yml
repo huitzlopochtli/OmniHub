@@ -32,11 +32,7 @@ jobs:
 
       - name: Install dependencies
         working-directory: frontend
-        # npm ci fails on Linux when package-lock.json was generated on Windows
-        # because platform-specific Tailwind oxide binaries get locked as win32-only.
-        # npm install respects the lockfile for versions but installs the correct
-        # platform binaries for the current OS.
-        run: npm install
+        run: npm ci
 
       - name: Build
         working-directory: frontend

@@ -4,7 +4,13 @@ import tailwindcss from '@tailwindcss/vite'
 import { VitePWA } from 'vite-plugin-pwa'
 import path from 'path'
 
+// When built for GitHub Pages the workflow sets VITE_BASE to /<repo-name>/
+// so the PWA manifest and all asset paths use the correct sub-path.
+// Locally (and for a custom domain / user-org page) this defaults to '/'.
+const base = process.env.VITE_BASE ?? '/'
+
 export default defineConfig({
+  base,
   plugins: [
     react(),
     tailwindcss(),
@@ -12,16 +18,16 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'apple-touch-icon.png'],
       manifest: {
-        name: 'Servarr Manager',
-        short_name: 'Servarr',
+        name: 'OmniHub',
+        short_name: 'OmniHub',
         description:
           'Complete media server manager — Sonarr, Radarr, SABnzbd, qBittorrent, Unraid and more',
         theme_color: '#0f172a',
         background_color: '#0f172a',
         display: 'standalone',
         orientation: 'any',
-        start_url: '/',
-        scope: '/',
+        start_url: base,
+        scope: base,
         icons: [
           {
             src: 'pwa-192x192.png',

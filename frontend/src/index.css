@@ -116,6 +116,16 @@ body {
   padding-bottom: max(env(safe-area-inset-bottom), 1rem);
 }
 
+/* Mobile: shrink the main content area so it never scrolls under the fixed BottomNav.
+   56px = BottomNav content height (py-2 + icon 20px + gap 4px + label 10px).
+   max(…, 1rem) mirrors pb-safe so old iPhones without a home indicator still clear the nav.
+   Only applies below lg breakpoint (1024px) where BottomNav is shown. */
+@media (max-width: 1023px) {
+  .mobile-nav-offset {
+    padding-bottom: calc(56px + max(env(safe-area-inset-bottom), 1rem));
+  }
+}
+
 /* Service panel transitions */
 .service-panel {
   height: 100%;

@@ -163,7 +163,7 @@ git push origin v1.0.0
 Settings → Pages → Source → **GitHub Actions**
 
 **Docker Hub setup** (one-time, in repo Settings → Secrets):  
-Add `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN` (use a Docker Hub access token, not your password).
+Add `DOCKERHUB_TOKEN` (use a Docker Hub access token, not your password). The username is hardcoded in the workflow.
 
 ---
 

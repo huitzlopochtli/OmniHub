@@ -176,7 +176,7 @@ OmniHub/
 
 GitHub Pages must be configured to use **GitHub Actions** as the source (Settings → Pages → Source).
 
-Docker Hub push requires two repository secrets: `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN`.
+Docker Hub push requires one repository secret: `DOCKERHUB_TOKEN` (username is hardcoded as `huitzlopochtli` in the workflow).
 
 ---
 

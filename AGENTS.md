@@ -27,6 +27,12 @@ npm run build
 `npm run build` runs: `tsc -b && eslint src && prettier --check . && vite build`  
 **All four must pass with zero errors.** Do not commit if the build is broken.
 
+## Before Every Commit
+
+**Always run `npm run build` and confirm it exits with code 0 before staging or committing any files.** This includes documentation-only changes — Prettier checks `index.html` and other non-TS files too.
+
+If Prettier fails, run `npm run format` then re-run `npm run build` before committing.
+
 ---
 
 ## Architecture — Critical Patterns
@@ -188,6 +194,14 @@ User config (URLs, API keys)
 ```
 
 **Nothing is ever proxied through OmniHub.** The browser calls the user's servers directly.
+
+---
+
+## Dependency Rules
+
+- **Never install platform-specific npm packages as direct dependencies.** Packages like `@tailwindcss/oxide-win32-x64-msvc` are OS/CPU-specific and will break CI on Linux runners.
+- Tailwind CSS is handled by `@tailwindcss/vite` → `@tailwindcss/oxide`. The oxide package already lists all platform binaries (win32, linux, macOS, ARM, etc.) as `optionalDependencies` — npm installs only the correct one for the current OS automatically. Do not manually install any `@tailwindcss/oxide-*` variant.
+- If you ever need to add a package that has platform-specific variants, always install the top-level cross-platform package, not the OS/CPU-specific sub-package.
 
 ---
 

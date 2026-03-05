@@ -98,10 +98,16 @@ The only acceptable matches are in `src/App.tsx` (the top-level `<BrowserRouter>
 
 ```
 OmniHub/
-├── .github/workflows/deploy.yml   # CI: build → Pages deploy → release on tag
+├── .github/workflows/deploy.yml   # CI: build → Pages deploy → Docker push → release on tag
 ├── AGENTS.md                      # ← you are here
 ├── DEVELOPMENT.md                 # Human developer guide
 ├── README.md                      # User-facing marketing page
+├── docker/
+│   ├── Dockerfile                 # Multi-stage: node:20-alpine build → nginx:alpine serve
+│   ├── docker-compose.yml         # docker compose up for self-hosters
+│   └── nginx.conf                 # SPA fallback + cache headers
+├── unraid/
+│   └── omnihub.xml                # Unraid Community Applications template
 └── frontend/
     ├── index.html                 # Title: OmniHub, apple-mobile-web-app-title: OmniHub
     ├── vite.config.ts             # base from VITE_BASE env; PWA manifest name: OmniHub
@@ -159,15 +165,18 @@ OmniHub/
 
 ## CI/CD
 
-`.github/workflows/deploy.yml` has three jobs:
+`.github/workflows/deploy.yml` has four jobs:
 
 | Job | Trigger | Action |
 |---|---|---|
 | `build` | push to `master` or `v*` tag | `npm ci` → build with `VITE_BASE=/OmniHub/` → upload artifacts |
 | `deploy-pages` | same | Deploy to GitHub Pages |
+| `docker` | same | Build multi-platform image (`linux/amd64`, `linux/arm64`) → push to Docker Hub as `huitzlopochtli/omnihub` |
 | `release` | `v*.*.*` tag only | Zip dist → create GitHub Release as `omnihub-v*.*.*.zip` |
 
 GitHub Pages must be configured to use **GitHub Actions** as the source (Settings → Pages → Source).
+
+Docker Hub push requires two repository secrets: `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN`.
 
 ---
 

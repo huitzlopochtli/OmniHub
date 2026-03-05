@@ -81,7 +81,13 @@ Output lands in `frontend/dist/`.
 OmniHub/
 ├── .github/
 │   └── workflows/
-│       └── deploy.yml          # CI/CD — GitHub Pages deploy + versioned releases
+│       └── deploy.yml          # CI/CD — GitHub Pages deploy + Docker Hub push + versioned releases
+├── docker/
+│   ├── Dockerfile              # Multi-stage: node:20-alpine build → nginx:alpine serve
+│   ├── docker-compose.yml      # docker compose up for self-hosters
+│   └── nginx.conf              # SPA fallback + asset cache headers
+├── unraid/
+│   └── omnihub.xml             # Unraid Community Applications template
 └── frontend/
     ├── public/                 # Static assets (icons, favicon)
     ├── src/
@@ -136,13 +142,15 @@ Defined in [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml).
 2. Build with `VITE_BASE=/OmniHub/`
 3. Copy `index.html` → `404.html` for SPA deep-link support
 4. Deploy to GitHub Pages
+5. Build multi-platform Docker image (`linux/amd64`, `linux/arm64`) and push `huitzlopochtli/omnihub:latest` to Docker Hub
 
 ### On `v*.*.*` tag push
 
 All of the above, **plus**:
 
-5. Zip `dist/` as `omnihub-v1.2.3.zip`
-6. Create a GitHub Release with the zip attached and auto-generated release notes
+6. Push versioned Docker tags: `:1.2.3`, `:1.2`, `:1`, `:latest`
+7. Zip `dist/` as `omnihub-v1.2.3.zip`
+8. Create a GitHub Release with the zip attached and auto-generated release notes
 
 **To cut a release:**
 
@@ -153,6 +161,39 @@ git push origin v1.0.0
 
 **GitHub Pages setup** (one-time, in repo Settings):  
 Settings → Pages → Source → **GitHub Actions**
+
+**Docker Hub setup** (one-time, in repo Settings → Secrets):  
+Add `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN` (use a Docker Hub access token, not your password).
+
+---
+
+## Running with Docker
+
+### Docker Compose (recommended)
+
+```bash
+# From the repo root
+docker compose -f docker/docker-compose.yml up -d
+```
+
+Open **http://localhost:8080**.
+
+### Docker CLI
+
+```bash
+docker run -d --name omnihub -p 8080:80 --restart unless-stopped huitzlopochtli/omnihub:latest
+```
+
+### Build locally
+
+```bash
+docker build -f docker/Dockerfile -t omnihub .
+docker run -d -p 8080:80 omnihub
+```
+
+### Unraid
+
+Copy [`unraid/omnihub.xml`](unraid/omnihub.xml) to `/boot/config/plugins/dockerMan/templates-user/` on your Unraid server, then add the container from the Docker tab.
 
 ---
 

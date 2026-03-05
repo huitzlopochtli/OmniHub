@@ -86,12 +86,36 @@ Everything — your server addresses, API keys, and layout preferences — is st
 
 ## Getting Started
 
-1. Open **[OmniHub](https://huitzlopochtli.github.io/OmniHub/)** in your browser (or [run it locally](DEVELOPMENT.md))
-2. Go to **Settings**
-3. Add a **Server Profile** and your service instances (URL + API key for each)
-4. Head to the **Dashboard** and start customising your widgets
+### Option A — GitHub Pages (no install)
 
-For setup instructions, project structure, and contribution guidelines see [DEVELOPMENT.md](DEVELOPMENT.md).
+1. Open **[huitzlopochtli.github.io/OmniHub](https://huitzlopochtli.github.io/OmniHub/)** in your browser
+2. Go to **Settings**, add a Server Profile and your service instances
+3. Head to the **Dashboard** and customise your widgets
+
+### Option B — Docker (self-hosted)
+
+```yaml
+# docker/docker-compose.yml
+services:
+  omnihub:
+    image: huitzlopochtli/omnihub:latest
+    container_name: omnihub
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+```
+
+```bash
+docker compose -f docker/docker-compose.yml up -d
+```
+
+Then open **http://localhost:8080**.
+
+### Option C — Unraid
+
+Copy [`unraid/omnihub.xml`](unraid/omnihub.xml) to `/boot/config/plugins/dockerMan/templates-user/` and add the container from the Unraid Docker tab.
+
+For full setup instructions and contribution guidelines see [DEVELOPMENT.md](DEVELOPMENT.md).
 
 ---
 

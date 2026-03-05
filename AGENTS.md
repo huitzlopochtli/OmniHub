@@ -222,3 +222,4 @@ User config (URLs, API keys)
 4. **PWA not installing correctly on GitHub Pages** — `start_url` and `scope` in the manifest must match the `base` path; `vite.config.ts` reads `VITE_BASE` env var and threads it through
 5. **`prettier --check` failing in CI** — run `npm run format` locally before committing any bulk-edited files
 6. **`patch-memoryrouter.cjs`** — a one-time migration script at `frontend/patch-memoryrouter.cjs`; it is in `.prettierignore` and `.gitignore` is not needed since it's a dev utility. Do not delete it; it serves as documentation of the MemoryRouter migration.
+7. **Routing broken on GitHub Pages sub-path** — `BrowserRouter` must receive `basename={import.meta.env.BASE_URL}`. Without it, `navigate('/dashboard')` pushes to `/dashboard` instead of `/OmniHub/dashboard`. Vite injects `BASE_URL` from the `base` config option automatically.

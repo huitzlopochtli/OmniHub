@@ -1,0 +1,107 @@
+name: Deploy & Release
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*.*.*"]
+
+# Allow only one concurrent deployment per ref
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ────────────────────────────────────────────────────────────────────────────
+  # BUILD
+  # Produces two artifacts:
+  #   • github-pages  – consumed by deploy-pages job
+  #   • dist          – consumed by release job
+  # ────────────────────────────────────────────────────────────────────────────
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: frontend
+        run: npm ci
+
+      - name: Build
+        working-directory: frontend
+        # For a project page the base must be /<repo-name>/.
+        # If you ever move to a custom domain or a user/org page (username.github.io)
+        # set VITE_BASE: / instead.
+        run: npm run build
+        env:
+          NODE_ENV: production
+          VITE_BASE: /${{ github.event.repository.name }}/
+
+      # GitHub Pages doesn't support SPA client-side routing out of the box.
+      # Copying index.html → 404.html makes every deep-link fall back to the app.
+      - name: Add SPA 404 fallback
+        run: cp frontend/dist/index.html frontend/dist/404.html
+
+      # Upload for GitHub Pages deployment
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: frontend/dist
+
+      # Upload as a plain artifact so the release job can download and zip it
+      - name: Upload dist artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: frontend/dist
+          if-no-files-found: error
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # DEPLOY TO GITHUB PAGES  (runs on every push to main AND on tag pushes)
+  # ────────────────────────────────────────────────────────────────────────────
+  deploy-pages:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # CREATE RELEASE  (runs only on v*.*.* tag pushes)
+  # ────────────────────────────────────────────────────────────────────────────
+  release:
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download dist artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
+
+      - name: Zip release assets
+        run: zip -r omnihub-${{ github.ref_name }}.zip dist/
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: omnihub-${{ github.ref_name }}.zip
+          generate_release_notes: true
+          fail_on_unmatched_files: true

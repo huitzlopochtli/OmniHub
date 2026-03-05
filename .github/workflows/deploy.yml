@@ -2,7 +2,7 @@ name: Deploy & Release
 
 on:
   push:
-    branches: [main]
+    branches: [master]
     tags: ["v*.*.*"]
 
 # Allow only one concurrent deployment per ref

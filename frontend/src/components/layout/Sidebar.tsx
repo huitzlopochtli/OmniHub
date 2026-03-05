@@ -65,10 +65,10 @@ export function Sidebar({ activeService }: SidebarProps) {
         )}
       >
         <div className="size-7 rounded-lg bg-sky-600 flex items-center justify-center text-white font-bold text-sm shrink-0">
-          S
+          O
         </div>
         {!sidebarCollapsed && (
-          <span className="text-sm font-semibold text-slate-100 truncate">Servarr</span>
+          <span className="text-sm font-semibold text-slate-100 truncate">OmniHub</span>
         )}
       </div>
 

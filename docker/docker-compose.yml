@@ -1,0 +1,7 @@
+services:
+  omnihub:
+    image: huitzlopochtli/omnihub:latest
+    container_name: omnihub
+    restart: unless-stopped
+    ports:
+      - "8080:80"   # change the host port (left side) if 8080 is already taken

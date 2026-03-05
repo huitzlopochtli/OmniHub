@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>OmniHub</Name>
+  <Repository>huitzlopochtli/omnihub:latest</Repository>
+  <Registry>https://hub.docker.com/r/huitzlopochtli/omnihub</Registry>
+  <Network>bridge</Network>
+  <Shell>sh</Shell>
+  <Privileged>false</Privileged>
+  <Project>https://github.com/huitzlopochtli/OmniHub</Project>
+  <Overview>OmniHub is a unified dashboard for self-hosted media server services (Sonarr, Radarr, Lidarr, Readarr, Bazarr, Prowlarr, Overseerr, qBittorrent, Transmission, Deluge, SABnzbd, NZBGet, Tautulli, and Unraid). Pure frontend PWA — no backend, no database, no proxying. Your browser talks directly to your services.</Overview>
+  <Category>MediaApp:Other Tools:</Category>
+  <WebUI>http://[IP]:[PORT:8080]/</WebUI>
+  <Icon>https://raw.githubusercontent.com/huitzlopochtli/OmniHub/master/frontend/public/pwa-192x192.png</Icon>
+  <Config
+    Name="Web UI Port"
+    Target="80"
+    Default="8080"
+    Mode="tcp"
+    Description="Port to access the OmniHub web interface."
+    Type="Port"
+    Display="always"
+    Required="true"
+    Mask="false">8080</Config>
+</Container>
